@@ -3,10 +3,13 @@ import java.util.Random;
 public class Board {
     private int boardSize; //The size of the board.
     private String[][] board; //Contains the board.
+    private int totalMinesFromStart;
+    private BoardType type;
     private final String UNKNOWN = "#"; //Hidden square
     private final String MINE = "*"; //Mine square
     private final String FLAG = "F"; //User suspects mine square
     private final String EMPTY = " "; //Empty square
+
     /*
         Board constructor.
         Takes boardSize as parameter and fills
@@ -14,6 +17,16 @@ public class Board {
      */
     public Board(int boardSize, BoardType type){
         this.boardSize = boardSize;
+        this.type = type;
+        createBoard(type);
+    }
+    public void setBoardSize(int boardSize){
+        this.boardSize = boardSize;
+    }
+    public int getBoardSize(){
+        return this.boardSize;
+    }
+    public void createBoard(BoardType type){
         board = new String[boardSize][boardSize];
         for(int i=0;i<boardSize;i++){
             for(int j=0;j<boardSize;j++){
@@ -106,6 +119,7 @@ public class Board {
             }
         }
     }
+
     public int countBombs(int row, int column) {
         /*
         Takes two ints, representing index for row and column in the board.
@@ -114,18 +128,19 @@ public class Board {
         */
         int numberOfBombs = 0;
 
-        for(int y = row - 1; y <= row + 1; y++) {
-            for(int x = column - 1; x <= column + 1; x++){
+        for (int y = row - 1; y <= row + 1; y++) {
+            for (int x = column - 1; x <= column + 1; x++) {
 
                 // If we check a square next to the edge, we will get an IndexOutOfBondsException,
                 // so we just catch it and move on.
                 try {
+
                     if(!(y == row && x == column)) {
-                        if (hiddenBoard[y].charAt(x) == '*') { // << change this to whatever the String[] representing the board is called.
+                        if (board[y][x] == "*") { // << Fixed it!
                             numberOfBombs++;
                         }
                     }
-                } catch(IndexOutOfBoundsException i) {
+                } catch (IndexOutOfBoundsException i) {
                     /*
                     Nothing to see here, just carry on with your day!
                     */
@@ -149,5 +164,32 @@ public class Board {
 
         }
 
+    }
+    /*
+        Checks if the player has won by looping through the board
+        and count all UNKNOWN squares.
+        If they are more than the totalMinesFromStart
+        the player has not won. If they are equal, the player has cleared all unknown squares without mines and won the game.
+     */
+    public boolean checkWin(){
+        int unKnownCounter = 0;
+        boolean hasPlayerWon = false;
+        for(int i=0;i<boardSize;i++){
+            for(int j=0;j<boardSize;j++){
+                if (board[i][j].equals(UNKNOWN)) {
+                    unKnownCounter++;
+                }
+                if(unKnownCounter>totalMinesFromStart){
+                    hasPlayerWon = false;
+                }else{
+                    hasPlayerWon = true;
+                }
+            }
+        }
+        return hasPlayerWon;
+    }
+    //Call createNewBoard to reset the gameBoard, use boardType to get correct initial layout.
+    public void resetBoard(){
+        createBoard(this.type);
     }
 }
