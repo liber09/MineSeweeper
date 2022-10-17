@@ -131,10 +131,11 @@ public class Board {
                 // If we check a square next to the edge, we will get an IndexOutOfBondsException,
                 // so we just catch it and move on.
                 try {
-                    if (!(y == row && x == column)) {
-                        //if (hiddenBoard[y].charAt(x) == '*') { // << change this to whatever the String[] representing the board is called.
-                        //    numberOfBombs++;
-                        //}
+
+                    if(!(y == row && x == column)) {
+                        if (board[y][x] == "*") { // << Fixed it!
+                            numberOfBombs++;
+                        }
                     }
                 } catch (IndexOutOfBoundsException i) {
                     /*
