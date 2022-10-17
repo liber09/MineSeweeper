@@ -1,6 +1,6 @@
 public class Board {
-    private int boardSize; //The size of the board
-    private String[][] board; //Contains the board
+    private int boardSize; //The size of the board.
+    private String[][] board; //Contains the board.
     private final String UNKNOWN = "#"; //Hidden square
     private final String MINE = "*"; //Mine square
     private final String FLAG = "F"; //User suspects mine square
