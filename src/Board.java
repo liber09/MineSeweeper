@@ -129,7 +129,7 @@ public class Board {
                     */
                 }
             }
-        }
+      //  }
         return numberOfBombs;
     }
 }
