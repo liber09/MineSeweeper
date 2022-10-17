@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Board {
     private int boardSize; //The size of the board.
     private String[][] board; //Contains the board.
@@ -131,5 +133,21 @@ public class Board {
             }
         }
         return numberOfBombs;
+    }
+    public void placeBombs(int boardsize, int difficulty){
+        Random ran = new Random();
+
+        double percent = difficulty / 100.0;
+        int boardslots = boardsize * boardsize;
+        double bombs = boardslots * percent;
+
+        for(int i = 0; i < bombs; i++){
+            int x = ran.nextInt(boardsize);
+            int y = ran.nextInt(boardsize);
+
+            board[x][y] = MINE;
+
+        }
+
     }
 }
