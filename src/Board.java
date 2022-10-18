@@ -14,6 +14,8 @@ public class Board {
         Board constructor.
         Takes boardSize as parameter and fills
         every square with UNKNOWN sign.
+
+
      */
     public Board(int boardSize, BoardType type){
         this.boardSize = boardSize;
@@ -149,16 +151,16 @@ public class Board {
         }
         return numberOfBombs;
     }
-    public void placeBombs(int boardsize, int difficulty){
+    public void placeBombs(int boardSize, int totalMinesFromStart){
         Random ran = new Random();
 
-        double percent = difficulty / 100.0;
-        int boardslots = boardsize * boardsize;
+        double percent = totalMinesFromStart / 100.0;
+        int boardslots = boardSize * boardSize;
         double bombs = boardslots * percent;
 
         for(int i = 0; i < bombs; i++){
-            int x = ran.nextInt(boardsize);
-            int y = ran.nextInt(boardsize);
+            int x = ran.nextInt(boardSize);
+            int y = ran.nextInt(boardSize);
 
             board[x][y] = MINE;
 
