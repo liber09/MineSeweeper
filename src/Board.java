@@ -119,13 +119,30 @@ public class Board {
             }
         }
     }
+    /*
+    Takes an int, difficulty, that the user provides.
+    Sets up backendBoard with mines and numbers, using placeBombs and countBombs
+     */
+    public void setUpBackendBoard(int difficulty) {
+        placeBombs(boardSize, difficulty);
+        for(int row = 0; row < boardSize; row++) {
+            for(int column = 0; column < boardSize; column++) {
+                int surroundingMines = countBombs(row, column);
+                if(surroundingMines != 0 && board[row][column] == EMPTY) {
+                    board[row][column] = String.valueOf(surroundingMines);
+                }
+            }
+        }
+    }
 
+
+    /*
+    Takes two ints, representing index for row and column in the board
+    Counts the bombs on the (up to) eight squares surrounding the chosen square.
+    Returns the result as an int.
+    */
     public int countBombs(int row, int column) {
-        /*
-        Takes two ints, representing index for row and column in the board.
-        Counts the bombs on the (up to) eight squares surrounding the chosen square.
-        Returns the result as an int.
-        */
+
         int numberOfBombs = 0;
 
         for (int y = row - 1; y <= row + 1; y++) {
