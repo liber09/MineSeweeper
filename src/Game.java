@@ -6,8 +6,6 @@ public class Game {
 
     Scanner sc = new Scanner(System.in);
 
-
-
     public int chooseLayout() {
 
 
@@ -15,36 +13,28 @@ public class Game {
         System.out.println(
                 "How large do you want your board to be?\n" +
                         "You can choose between a scale of 6x6 to 99x99!\n" +
-                        "Please type 6 for 6x6, 8 for 8x8 and so on."); // just a scratch until we decide how many fields min and max are
-        // do while until valid answer och try catch if string
+                        "Please type 6 for 6x6, 8 for 8x8 and so on.");
         boolean validAnswer = true;
 
         int scale = 0;
         do {
-
             try {
                 int boardScale = Integer.parseInt(sc.nextLine());
                 if (boardScale > 6 && boardScale < 99) {
                     scale = boardScale;
-
                     validAnswer = true;
                 }
                 if (boardScale < 6 || boardScale > 99) {
                     System.out.println("Not a valid choice! Please choose a number between 6 and 99");
                     validAnswer = false;
                 }
-
             } catch (NumberFormatException ex) {
                 System.out.println("Not a valid choice! Please choose a number between 6 and 99");
                 validAnswer = false;
-
             }
-            ;
         } while (!validAnswer);
-        //System.out.println(scale);
-        return scale;
 
-
+        return scale; // boardSize
     }
 
     protected   int chooseDifficulty() {
