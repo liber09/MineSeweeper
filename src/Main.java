@@ -5,11 +5,13 @@ public class Main {
 
         Game game = new Game();
 
+        int boardSize;
+
         System.out.println("Hello! Welcome to minesweeper!\n");
-
-        game.chooseLayout(); // code for scale here
-
+        boardSize = game.chooseLayout();
+        game.backendBoard = new Board(boardSize, BoardType.BackendBoard);
         Scanner sc = new Scanner(System.in);
+        game.backendBoard.printBoard();
 
         game.chooseDifficulty(); // code for easy, medium or hard here
 
