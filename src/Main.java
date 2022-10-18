@@ -5,6 +5,7 @@ public class Main {
 
         Game game = new Game();
 
+
         int boardSize;
 
         System.out.println("Hello! Welcome to minesweeper!\n");
@@ -13,8 +14,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         game.backendBoard.printBoard();
 
-        game.chooseDifficulty(); // code for easy, medium or hard here
-
+        game.backendBoard.placeBombs(boardSize, game.chooseDifficulty()); // code for easy, medium or hard here
+        game.backendBoard.printBoard();
 
         if (playAgain(sc)) {
             continueSettings(sc,game); // the player can choose weather to continue with the same settings or choose new ones
