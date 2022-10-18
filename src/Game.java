@@ -7,6 +7,9 @@ public class Game {
     Scanner sc = new Scanner(System.in);
 
     public int chooseLayout() {
+
+
+
         System.out.println(
                 "How large do you want your board to be?\n" +
                         "You can choose between a scale of 6x6 to 99x99!\n" +
