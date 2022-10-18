@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Board {
     private int boardSize; //The size of the board.
     private String[][] board; //Contains the board.
@@ -13,7 +15,7 @@ public class Board {
         Takes boardSize as parameter and fills
         every square with UNKNOWN sign.
      */
-    public Board(int boardSize, BoardType type) {
+    public Board(int boardSize, BoardType type){
         this.boardSize = boardSize;
         this.type = type;
         createBoard(type);
@@ -26,49 +28,49 @@ public class Board {
     }
     public void createBoard(BoardType type){
         board = new String[boardSize][boardSize];
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                if (type == BoardType.PlayerBoard) {
+        for(int i=0;i<boardSize;i++){
+            for(int j=0;j<boardSize;j++){
+                if(type == BoardType.PlayerBoard){
                     board[i][j] = UNKNOWN;
                 }
-                if (type == BoardType.BackendBoard) {
+                if(type == BoardType.BackendBoard){
                     board[i][j] = EMPTY;
                 }
+
             }
         }
     }
-
     /*
         Prints the board. A couple of loops
         printing different parts of the board.
      */
-    public void printBoard() {
+    public void printBoard(){
         //Print column headers
-        for (int i = 0; i < boardSize; i++) {
-            if (i == 0) {
-                System.out.print(" Y   " + i);
-            } else if (i == boardSize - 1) {
-                if (i < 10) {
-                    System.out.println("  " + i);
-                } else {
-                    System.out.println(" " + i);
+        for(int i=0;i<boardSize;i++){
+            if(i == 0){
+                System.out.print(" Y   "+i);
+            }else if(i == boardSize-1){
+                if(i<10){
+                    System.out.println("  "+i);
+                }else{
+                    System.out.println(" "+i);
                 }
 
-            } else if (i < 10) {
-                System.out.print("  " + i);
-            } else {
-                System.out.print(" " + i);
+            }else if(i<10){
+                System.out.print("  "+i);
+            }else{
+                System.out.print(" "+i);
             }
         }
         //Print top border
-        for (int j = 0; j < boardSize; j++) {
-            if (j == 0) {
+        for(int j=0;j<boardSize;j++){
+            if(j == 0){
                 System.out.print("X____");
-            } else if (j == boardSize - 1) {
+            }else if(j == boardSize-1){
                 System.out.println("______");
-            } else if (j < 10) {
+            }else if(j<10){
                 System.out.print("___");
-            } else {
+            }else{
                 System.out.print("___");
             }
         }
@@ -76,42 +78,43 @@ public class Board {
             Print row header, right and lefter borders
             and the game squares.
          */
-        for (int l = 0; l < boardSize; l++) {
-            if (l == 0) {
-                System.out.print(l + " |");
-            } else if (l == boardSize - 1) {
-                if (l < 10) {
-                    System.out.print(l + " |");
-                } else {
-                    System.out.print(l + "|");
+        for(int l=0;l<boardSize;l++){
+            if(l == 0){
+                System.out.print(l+" |");
+            }else if(l == boardSize-1){
+                if (l<10){
+                    System.out.print(l+" |");
+                }else{
+                    System.out.print(l+"|");
                 }
-            } else {
-                if (l < 10) {
-                    System.out.print(l + " |");
-                } else {
-                    System.out.print(l + "|");
+            }else{
+                if(l<10){
+                    System.out.print(l+" |");
+                }
+                else{
+                    System.out.print(l+"|");
                 }
 
             }
-            for (int m = 0; m < boardSize; m++) {
-                if (m == boardSize - 1) {
-                    System.out.println("  " + board[l][m] + " |");
-                } else {
-                    System.out.print("  " + board[l][m]);
+            for(int m=0;m<boardSize;m++){
+                if(m == boardSize-1){
+                    System.out.println("  "+board[l][m]+" |");
+                }else{
+                    System.out.print("  "+board[l][m]);
                 }
             }
 
 
         }
         //Print the bottom border
-        for (int n = 0; n < boardSize; n++) {
-            if (n == 0) {
+        for(int n=0;n<boardSize;n++){
+            if(n == 0){
                 System.out.print("_____");
-            } else if (n == boardSize - 1) {
+            }else if(n == boardSize-1){
                 System.out.println("______");
-            } else if (n < 10) {
+            }else if(n<10){
                 System.out.print("___");
-            } else {
+            }else{
                 System.out.print("___");
             }
         }
@@ -145,6 +148,22 @@ public class Board {
             }
         }
         return numberOfBombs;
+    }
+    public void placeBombs(int boardsize, int difficulty){
+        Random ran = new Random();
+
+        double percent = difficulty / 100.0;
+        int boardslots = boardsize * boardsize;
+        double bombs = boardslots * percent;
+
+        for(int i = 0; i < bombs; i++){
+            int x = ran.nextInt(boardsize);
+            int y = ran.nextInt(boardsize);
+
+            board[x][y] = MINE;
+
+        }
+
     }
     /*
         Checks if the player has won by looping through the board
