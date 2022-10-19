@@ -22,15 +22,19 @@ public class Game {
                     "            OOOOOOOOOOOOOOOOO\n" +
                     "              OOOOOOOOOOOOO \n" +
                     "                OOOOOOOOO\n");
+
+        do {
         boardSize = chooseLayout();
         backendBoard = new Board(boardSize, BoardType.BackendBoard);
         int difficulty =chooseDifficulty();
         backendBoard.setUpBackendBoard(difficulty);
         backendBoard.printBoard();
-
-        if (playAgain()) {
-            continueSettings(); // the player can choose weather to continue with the same settings or choose new ones
+        // ta in userinput war man vill undersöker etc.
         }
+
+        while (playAgain());
+          
+
     }
 
     public int chooseLayout() {
@@ -117,31 +121,6 @@ public class Game {
 
         } while (!validAnswer);
         return true;
-    }
-
-    protected void continueSettings() {
-        boolean validSettings = true;
-        int boardSize;
-        do {
-            System.out.println("Do you want to play with the same settings as before press \"b\" \n" +
-                    "if you want to change your settings press \"c\" ");
-            String howToContinue = sc.nextLine();
-            if (howToContinue.equals("b")) {
-
-               // backendBoard.resetBoard();
-               // System.out.println(backendBoard); does not work yet!
-                // cannot take in same difficulty yet
-            } else if (howToContinue.equals("c")) {
-                boardSize = chooseLayout();
-                backendBoard = new Board(boardSize, BoardType.BackendBoard);
-                backendBoard.setUpBackendBoard(chooseDifficulty());
-                backendBoard.printBoard();
-            } else {
-                System.out.println("not a valid choice");
-                validSettings = false;
-            }
-
-        } while (!validSettings);
     }
 
 }
