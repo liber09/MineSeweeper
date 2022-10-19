@@ -189,6 +189,10 @@ public class Board {
         }
 
     }
+    //Takes x and y coordinates and returns the value of that square
+    public String checkSquare(int x, int y){
+        return board[x][y];
+    }
 
     /*
         Checks if the player has won by looping through the board
