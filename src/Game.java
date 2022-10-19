@@ -24,12 +24,12 @@ public class Game {
                     "                OOOOOOOOO\n");
 
         do {
-        boardSize = chooseLayout();
-        backendBoard = new Board(boardSize, BoardType.BackendBoard);
-        int difficulty =chooseDifficulty();
-        backendBoard.setUpBackendBoard(difficulty);
-        backendBoard.printBoard();
-        // ta in userinput war man vill undersöker etc.
+            boardSize = chooseLayout();
+            backendBoard = new Board(boardSize, BoardType.BackendBoard);
+            int difficulty =chooseDifficulty();
+            backendBoard.setUpBackendBoard(difficulty);
+            backendBoard.printBoard();
+            // ta in userinput war man vill undersöker etc.
         }
 
         while (playAgain());
@@ -106,11 +106,12 @@ public class Game {
             System.out.println("Wanna play again? Type \"c\" for continue, type \"q\" to quit");
             String playAgain = sc.nextLine();
 
-            if (playAgain.equals("c")) {
-
+            if (playAgain.equalsIgnoreCase("c")) {
+                playerBoard.resetBoard();
+                backendBoard.resetBoard();
                 return true;
 
-            } else if (playAgain.equals("q")) {
+            } else if (playAgain.equalsIgnoreCase("q")) {
                 System.out.println("See you around! Bye, bye!");
 
                 return false;
@@ -121,6 +122,11 @@ public class Game {
 
         } while (!validAnswer);
         return true;
+    }
+
+    public void gameOver(int x, int y){
+        System.out.println("BOOM!! X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
+        backendBoard.printBoard();
     }
 
 }
