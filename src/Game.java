@@ -8,24 +8,37 @@ public class Game {
     public void startGame(){
         int boardSize;
 
-        System.out.println("Hello! Welcome to minesweeper!\n");
+        System.out.println("Hello! Welcome to minesweeper!\n"+
+                    "                          *  *  '   ;\n"+
+                    "                       *; * ' * ; \n"+
+                    "                         * **;*;;*,\n" +
+                    "                          _/  * ; * \n" +
+                    "                     ____/    \n" +
+                    "                   __I__       \n"+
+                    "                   OOOO  \n" +
+                    "               OOOOOOOOOOO \n"+
+                    "             OOOOOOOOOOOOOOO \n" +
+                    "            OOOOOOOOOOOOOOOOO \n" +
+                    "            OOOOOOOOOOOOOOOOO\n" +
+                    "              OOOOOOOOOOOOO \n" +
+                    "                OOOOOOOOO\n");
         boardSize = chooseLayout();
         backendBoard = new Board(boardSize, BoardType.BackendBoard);
-        Scanner sc = new Scanner(System.in);
         backendBoard.printBoard();
         backendBoard.placeBombs(boardSize, chooseDifficulty());
         backendBoard.printBoard();
 
-        if (playAgain(sc)) {
-            continueSettings(sc); // the player can choose weather to continue with the same settings or choose new ones
+        if (playAgain()) {
+            continueSettings(); // the player can choose weather to continue with the same settings or choose new ones
         }
     }
 
     public int chooseLayout() {
         System.out.println(
-                "How large do you want your board to be?\n" +
-                        "You can choose between a scale of 6x6 to 99x99!\n" +
-                        "Please type 6 for 6x6, 8 for 8x8 and so on.");
+                """
+                        How large do you want your board to be?
+                        You can choose between a scale of 6x6 to 99x99!
+                        Please type 6 for 6x6, 8 for 8x8 and so on.""");
         boolean validAnswer = true;
 
         int scale = 0;
@@ -53,34 +66,36 @@ public class Game {
         System.out.println("GREAT CHOICE! What level of difficulty do you choose?\n" +
                 "Please press \"e\" for easy, \"m\" for medium and \"h\" for hard!");
 
-        boolean validChoiceDifficulty = true;
+        boolean validChoiceDifficulty;
         int difficulty = 0;
         do {
 
             String choiceOfDifficulty = sc.nextLine();
-            if (choiceOfDifficulty.equals("e")) {
-                difficulty = 10;
-                validChoiceDifficulty = true;
-            } else if
-            (choiceOfDifficulty.equals("m")) {
-                difficulty = 15;
-                validChoiceDifficulty = true;
-            } else if
-            (choiceOfDifficulty.equals("h")) {
-                difficulty = 20;
-                validChoiceDifficulty = true;
-            } else {
-                System.out.println("That's not a valid answer, " +
-                        "please choose between \"e\" for easy, \"m\" for medium and \"h\" for hard!");
-                validChoiceDifficulty = false;
-
+            switch (choiceOfDifficulty) {
+                case "e" -> {
+                    difficulty = 10;
+                    validChoiceDifficulty = true;
+                }
+                case "m" -> {
+                    difficulty = 15;
+                    validChoiceDifficulty = true;
+                }
+                case "h" -> {
+                    difficulty = 20;
+                    validChoiceDifficulty = true;
+                }
+                default -> {
+                    System.out.println("That's not a valid answer, " +
+                            "please choose between \"e\" for easy, \"m\" for medium and \"h\" for hard!");
+                    validChoiceDifficulty = false;
+                }
             }
         } while (!validChoiceDifficulty);
 
         return difficulty;
     }
 
-    public boolean playAgain(Scanner sc) {
+    public boolean playAgain() {
         boolean validAnswer;
 
         do {
@@ -104,7 +119,7 @@ public class Game {
         return true;
     }
 
-    protected void continueSettings(Scanner sc) {
+    protected void continueSettings() {
         boolean validSettings = true;
         int boardSize;
         do {
