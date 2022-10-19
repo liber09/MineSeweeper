@@ -24,8 +24,8 @@ public class Game {
                     "                OOOOOOOOO\n");
         boardSize = chooseLayout();
         backendBoard = new Board(boardSize, BoardType.BackendBoard);
-        backendBoard.printBoard();
-        backendBoard.placeBombs(boardSize, chooseDifficulty());
+        int difficulty =chooseDifficulty();
+        backendBoard.setUpBackendBoard(difficulty);
         backendBoard.printBoard();
 
         if (playAgain()) {
@@ -37,7 +37,7 @@ public class Game {
         System.out.println(
                 """
                         How large do you want your board to be?
-                        You can choose between a scale of 6x6 to 99x99!
+                        You can choose between a scale of 6x6 to 40x40!
                         Please type 6 for 6x6, 8 for 8x8 and so on.""");
         boolean validAnswer = true;
 
@@ -45,11 +45,11 @@ public class Game {
         do {
             try {
                 int boardScale = Integer.parseInt(sc.nextLine());
-                if (boardScale >= 6 && boardScale <= 99) {
+                if (boardScale >= 6 && boardScale <= 40) {
                     scale = boardScale;
                     validAnswer = true;
                 }
-                if (boardScale < 6 || boardScale > 99) {
+                if (boardScale < 6 || boardScale > 40) {
                     System.out.println("Not a valid choice! Please choose a number between 6 and 99");
                     validAnswer = false;
                 }
@@ -134,7 +134,7 @@ public class Game {
             } else if (howToContinue.equals("c")) {
                 boardSize = chooseLayout();
                 backendBoard = new Board(boardSize, BoardType.BackendBoard);
-                backendBoard.placeBombs(boardSize, chooseDifficulty());
+                backendBoard.setUpBackendBoard(chooseDifficulty());
                 backendBoard.printBoard();
             } else {
                 System.out.println("not a valid choice");
