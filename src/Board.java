@@ -43,7 +43,7 @@ public class Board {
         if(board[x][y].equals(UNKNOWN)){
             board[x][y] = FLAG;
         }
-        if(board[x][y].equals(FLAG)){
+        else if(board[x][y].equals(FLAG)){
             board[x][y] = UNKNOWN;
         }
         printBoard();
@@ -239,5 +239,13 @@ public class Board {
     public void resetBoard() {
         createBoard(this.type);
 
+    }
+
+    public boolean checkIfMine(int x, int y) {
+       return checkSquare(x,y).equals(MINE);
+    }
+
+    public void setEmptySpace(int x, int y) {
+        board[x][y] = EMPTY;
     }
 }
