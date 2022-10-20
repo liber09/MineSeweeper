@@ -31,6 +31,23 @@ public class Board {
         return this.boardSize;
     }
 
+    //Checks a square to see if it contains a flag, if so return true, otherwise return false.
+    public Boolean isSquareFlag(int x, int y){
+        if (checkSquare(x,y).equals(FLAG)){
+            return true;
+        }
+        return false;
+    }
+    //Place a flag if square is unknown or remove flag if there is a flag on the position. Place on playerBoard and print the board.
+    public void placeFlag(int x, int y){
+        if(board[x][y].equals(UNKNOWN)){
+            board[x][y] = FLAG;
+        }
+        if(board[x][y].equals(FLAG)){
+            board[x][y] = UNKNOWN;
+        }
+        printBoard();
+    }
     public void createBoard(BoardType type) {
         board = new String[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {

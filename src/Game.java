@@ -1,3 +1,4 @@
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Game {
@@ -26,9 +27,22 @@ public class Game {
         do {
             boardSize = chooseLayout();
             backendBoard = new Board(boardSize, BoardType.BackendBoard);
+            playerBoard = new Board(boardSize, BoardType.PlayerBoard);
             int difficulty =chooseDifficulty();
             backendBoard.setUpBackendBoard(difficulty);
-            backendBoard.printBoard();
+            playerBoard.printBoard();
+            //Check if the selected x,y coordinates is a flag, if so, ask if user wants to remove flag
+            int x = 0; //Remove this when coding gameLoop
+            int y = 0; //Remove this when coding gameLoop
+            if(playerBoard.isSquareFlag(x,y)){
+                System.out.println("Do you want to remove the flag? press \"y\" for yes or \"n\" for no");
+                String removeFlag = sc.nextLine().toLowerCase();
+                switch (removeFlag){
+                    case "y":
+                        playerBoard.placeFlag(x,y);
+                        break;
+                }
+            }
             // ta in userinput war man vill undersöker etc.
         }
 
