@@ -1,6 +1,4 @@
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 public class Board {
     private int boardSize; //The size of the board.
@@ -31,6 +29,22 @@ public class Board {
 
     public int getBoardSize() {
         return this.boardSize;
+    }
+    //return the number of mines on the board.
+    public int getTotalMinesFromStart(){
+        return this.totalMinesFromStart;
+    }
+    //Count how many mines the player has marked on the board and return number
+    public int countNumberOfMarkedBombs(){
+        int flagCounter = 0;
+        for(int i = 0;i<boardSize;i++){
+            for(int j = 0;j<boardSize;j++){
+                if(board[i][j].equals(FLAG)){
+                    flagCounter++;
+                }
+            }
+        }
+        return flagCounter;
     }
 
     //Checks a square to see if it contains a flag, if so return true, otherwise return false.

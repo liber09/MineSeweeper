@@ -1,4 +1,3 @@
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Game {
@@ -32,6 +31,7 @@ public class Game {
             backendBoard.setUpBackendBoard(difficulty);
 
             playerBoard.printBoard();
+            printNumberOfMinesAndMarkedMines();
             //Check if the selected x,y coordinates is a flag, if so, ask if user wants to remove flag
             int x = 0; //Remove this when coding gameLoop
             int y = 0; //Remove this when coding gameLoop
@@ -150,6 +150,11 @@ public class Game {
         System.out.println("BOOM!! X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
         backendBoard.printBoard();
     }
+    //Prints number of mines and number of marked mines to the user
+    public void printNumberOfMinesAndMarkedMines(){
+        System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " of them.");
+    }
+
 
     static int wins = 0;
     public static void winCounter(String name) {
