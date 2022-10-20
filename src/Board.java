@@ -5,11 +5,13 @@ public class Board {
     private String[][] board; //Contains the board.
     private int totalMinesFromStart;
     private BoardType type;
-    private final String UNKNOWN = "#"; //Hidden square
-    private final String MINE = "*"; //Mine square
-    private final String FLAG = "F"; //User suspects mine square
+    private final String UNKNOWN = TEXT_GREEN+"#"+TEXT_RESET; //Hidden square
+    private final String MINE = TEXT_RED +"*"+TEXT_RESET; //Mine square
+    private final String FLAG = TEXT_RED+"F"+TEXT_RESET; //User suspects mine square
     private final String EMPTY = " "; //Empty square
-
+    public static final String TEXT_RED = "\u001B[31m";
+    public static final String TEXT_GREEN = "\u001B[32m";
+    public static final String TEXT_RESET = "\u001B[0m";
     /*
         Board constructor.
         Takes boardSize as parameter and fills
@@ -192,7 +194,7 @@ public class Board {
                 try {
 
                     if (!(y == row && x == column)) {
-                        if (board[y][x] == "*") { // << Fixed it!
+                        if (board[y][x] == MINE) { // << Fixed it!
                             numberOfBombs++;
                         }
                     }

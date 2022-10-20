@@ -5,23 +5,32 @@ public class Game {
     Board backendBoard; //The board in the background, handling mine positions etc
     Scanner sc = new Scanner(System.in);
 
+
+    public static final String TEXT_RED = "\u001B[31m";
+    public static final String TEXT_BLUE = "\u001B[34m";
+    public static final String TEXT_RESET = "\u001B[0m";
+    public static final String TEXT_YELLOW = "\u001B[33m";
+    public static final String TEXT_WHITE = "\u001B[37m";
+    public static final String TEXT_BOLD ="\033[0;1m";
     public void startGame(){
         int boardSize;
         int round = 1;
-        System.out.println("Hello! Welcome to minesweeper!\n"+
-                    "                          *  *  '   ;\n"+
-                    "                       *; * ' * ; \n"+
-                    "                         * **;*;;*,\n" +
-                    "                          _/  * ; * \n" +
-                    "                     ____/    \n" +
-                    "                   __I__       \n"+
-                    "                   OOOO  \n" +
-                    "               OOOOOOOOOOO \n"+
-                    "             OOOOOOOOOOOOOOO \n" +
-                    "            OOOOOOOOOOOOOOOOO \n" +
-                    "            OOOOOOOOOOOOOOOOO\n" +
-                    "              OOOOOOOOOOOOO \n" +
-                    "                OOOOOOOOO\n");
+        System.out.println("Hello! Welcome to"+ TEXT_BOLD+ TEXT_RED+"       * MI,  SW  **,  ER\n"+
+                    "                      "+TEXT_RED+"  * '; "+TEXT_YELLOW+"NE *  EE"+TEXT_RED+"P' *  ;\n"+
+                    "                       *;"+TEXT_YELLOW+" * ' *"+TEXT_RED+" ; *!'\n"+
+                    "                         * *"+TEXT_YELLOW+"*;*;"+TEXT_RED+";*,\n" +
+                    "                        "+TEXT_WHITE+"/  "+TEXT_RED+"* ; * \n" +
+                    "                  "+TEXT_WHITE+"    /   \n" +
+                    "           "+TEXT_BLUE+"         _"+TEXT_WHITE+"s"+TEXT_BLUE+"_       \n"+
+                    "                   OOOO  \\\n" +
+                    "               OOOOOOOOOOOO \\\n"+
+                    "             OOOOOOOOOOOOOOOO \\\n" +
+                    "            OOOOOOOOOOOOOOOOOO )\n" +
+                    "            OOOOOOOOOOOOOOOOOO )\n" +
+                    "              OOOOOOOOOOOOOO  )\n" +
+                    "                OOOOOOOOOO  )\n"+TEXT_RESET);
+
+
 
         do {
             boardSize = chooseLayout();
@@ -30,13 +39,14 @@ public class Game {
             int difficulty =chooseDifficulty();
             backendBoard.setUpBackendBoard(difficulty);
 
-            playerBoard.printBoard();
+
             printNumberOfMinesAndMarkedMines();
             //Check if the selected x,y coordinates is a flag, if so, ask if user wants to remove flag
             int x = 0; //Remove this when coding gameLoop
             int y = 0; //Remove this when coding gameLoop
             if(playerBoard.isSquareFlag(x,y)){
-                System.out.println("Do you want to remove the flag? press \"y\" for yes or \"n\" for no");
+                System.out.println("Do you want to remove the flag? press "+TEXT_BOLD+"\"y\""+TEXT_RESET+"" +
+                        " for yes or "+TEXT_BOLD+"\"n\""+TEXT_RESET+" for no");
                 String removeFlag = sc.nextLine().toLowerCase();
                 switch (removeFlag){
                     case "y":
@@ -61,10 +71,9 @@ public class Game {
 
     public int chooseLayout() {
         System.out.println(
-                """
-                        How large do you want your board to be?
-                        You can choose between a scale of 6x6 to 40x40!
-                        Please type 6 for 6x6, 8 for 8x8 and so on.""");
+                " How large do you want your board to be?\n " +
+                        "You can choose between a scale of 6x6 to 40x40!\n " +
+                        "Please type "+TEXT_BOLD+" 6 for 6x6, 8 for 8x8 "+ TEXT_RESET+"and so on.");
         boolean validAnswer = true;
 
         int scale = 0;
