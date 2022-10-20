@@ -1,4 +1,6 @@
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Board {
     private int boardSize; //The size of the board.
@@ -209,6 +211,29 @@ public class Board {
     //Takes x and y coordinates and returns the value of that square
     public String checkSquare(int x, int y){
         return board[x][y];
+    }
+
+    /*
+    Used in backendBoard to reveal empty squares and add them to playerBoard. It also adds the border numbers.
+     */
+    public void revealEmptySquares(int row, int column, Board playerBoard) {
+        // first, we check the bounderies
+        if(row < 0 || row > boardSize - 1 || column < 0 || column > boardSize - 1) {
+            return;
+        }
+        // Here we check if the square is empty and not already checked.
+        if(board[row][column] == EMPTY && playerBoard.board[row][column] == UNKNOWN) {
+            // If so, we update the square in playerBoard...
+            playerBoard.board[row][column] = EMPTY;
+            // ...and check the surrounding squares by four recursive calls!
+            revealEmptySquares(row - 1, column, playerBoard);
+            revealEmptySquares(row + 1, column, playerBoard);
+            revealEmptySquares(row, column - 1, playerBoard);
+            revealEmptySquares(row, column + 1, playerBoard);
+        // If the square isn't EMPTY, but unchecked, we just uncover it
+        } else if(playerBoard.board[row][column] == UNKNOWN) {
+            playerBoard.board[row][column] = board[row][column];
+        }
     }
 
     /*
