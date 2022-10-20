@@ -51,12 +51,34 @@ public class Game {
             round++;
 
             System.out.println("Get ready for round " + round + "!");
+            gameLoop();
 
         }
 
         while (playAgain());
           
 
+    }
+
+    private void gameLoop() {
+        while (true){
+            playerBoard.printBoard();
+            System.out.println("Choose the X coordinate");
+            int catchX =  sc.nextInt();
+            sc.nextLine();
+            System.out.println("Choose the Y coordinate");
+            int catchY = sc.nextInt();
+            sc.nextLine();
+
+            if(backendBoard.checkIfMine(catchX, catchY)){
+                gameOver(catchX,catchY);
+                break;
+            }
+            else {
+                playerBoard.setEmptySpace(catchX,catchY);
+            }
+            //need to also check if we have won
+        }
     }
 
     public int chooseLayout() {
