@@ -8,7 +8,7 @@ public class Game {
 
     public void startGame(){
         int boardSize;
-
+        int round = 1;
         System.out.println("Hello! Welcome to minesweeper!\n"+
                     "                          *  *  '   ;\n"+
                     "                       *; * ' * ; \n"+
@@ -30,6 +30,7 @@ public class Game {
             playerBoard = new Board(boardSize, BoardType.PlayerBoard);
             int difficulty =chooseDifficulty();
             backendBoard.setUpBackendBoard(difficulty);
+
             playerBoard.printBoard();
             //Check if the selected x,y coordinates is a flag, if so, ask if user wants to remove flag
             int x = 0; //Remove this when coding gameLoop
@@ -42,8 +43,15 @@ public class Game {
                         playerBoard.placeFlag(x,y);
                         break;
                 }
-            }
+            } 
+            backendBoard.printBoard();
+            playerBoard.printBoard();
+
             // ta in userinput war man vill undersöker etc.
+            round++;
+
+            System.out.println("Get ready for round " + round + "!");
+
         }
 
         while (playAgain());
@@ -89,7 +97,7 @@ public class Game {
         do {
 
             String choiceOfDifficulty = sc.nextLine();
-            switch (choiceOfDifficulty) {
+            switch (choiceOfDifficulty.toLowerCase()) {
                 case "e" -> {
                     difficulty = 10;
                     validChoiceDifficulty = true;
@@ -142,5 +150,15 @@ public class Game {
         System.out.println("BOOM!! X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
         backendBoard.printBoard();
     }
+
+    static int wins = 0;
+    public static void winCounter(String name) {
+
+        // if checkwin is true
+        wins++;
+        System.out.println("Congratulations you won!!! \n Your total wins are" + wins);
+    }
+
+
 
 }

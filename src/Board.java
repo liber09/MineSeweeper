@@ -126,7 +126,6 @@ public class Board {
                 }
             }
 
-
         }
         //Print the bottom border
         for (int n = 0; n < boardSize; n++) {
@@ -157,6 +156,7 @@ public class Board {
             }
         }
     }
+
 
 
     /*
