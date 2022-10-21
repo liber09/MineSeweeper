@@ -216,12 +216,23 @@ public class Board {
         double bombs = boardslots * percent;
 
         for (int i = 0; i < bombs; i++) {
+
             int x = ran.nextInt(boardSize);
             int y = ran.nextInt(boardSize);
 
             board[x][y] = MINE;
 
         }
+        double bombsInt = Math.ceil(bombs);
+        this.totalMinesFromStart = (int) bombsInt; // detta är inte korrekt än!!¢
+        System.out.println(totalMinesFromStart);
+
+    }
+
+    public boolean validBombPlacement(int x, int y)
+    { if (board[x][y].equals(MINE)){
+        return false;
+    }  return true;
 
     }
     //Takes x and y coordinates and returns the value of that square
@@ -282,11 +293,24 @@ public class Board {
 
     }
 
+
     public boolean checkIfMine(int x, int y) {
-       return checkSquare(x,y).equals(MINE);
+        return checkSquare(x,y).equals(MINE);
     }
 
-    public void setEmptySpace(int x, int y) {
-        board[x][y] = EMPTY;
+  /*  public void setTotalMinesFromStart(int boardSize, int difficulty) {
+
+        double percent = difficulty/ 100.0;
+        int boardslots = boardSize * boardSize;
+        double bombs = boardslots * percent;
+        double bombsInt = Math.floor(bombs);
+      this.totalMinesFromStart = (int) bombsInt;
+      System.out.println(totalMinesFromStart);
+
     }
+
+
+  /*  public void setEmptySpace(int x, int y) {
+        board[x][y] = EMPTY;
+    } */
 }
