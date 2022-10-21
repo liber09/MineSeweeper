@@ -14,11 +14,12 @@ public class Main {
         game.backendBoard = new Board(size, BoardType.BackendBoard);
         game.playerBoard = new Board(size, BoardType.PlayerBoard);
         game.backendBoard.setUpBackendBoard(difficulty);
+        //game.backendBoard.setTotalMinesFromStart(size,difficulty);
 
         game.backendBoard.printBoard();
 
         while(true) {
-            System.out.println("Enter coordinates: ");
+            System.out.println("Enter coordinates on x and y and separate with space: ");
             Scanner input = new Scanner(System.in);
             String[] currentInput;
             int[] coordinates = new int[2];

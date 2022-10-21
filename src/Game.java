@@ -34,60 +34,100 @@ public class Game {
 
         do {
             boardSize = chooseLayout();
-            backendBoard = new Board(boardSize, BoardType.BackendBoard);
-            playerBoard = new Board(boardSize, BoardType.PlayerBoard);
             int difficulty =chooseDifficulty();
-            backendBoard.setUpBackendBoard(difficulty);
+            gameLoop(boardSize,difficulty);
 
-
-            printNumberOfMinesAndMarkedMines();
-            //Check if the selected x,y coordinates is a flag, if so, ask if user wants to remove flag
-            int x = 0; //Remove this when coding gameLoop
-            int y = 0; //Remove this when coding gameLoop
-            if(playerBoard.isSquareFlag(x,y)){
-                System.out.println("Do you want to remove the flag? press "+TEXT_BOLD+"\"y\""+TEXT_RESET+"" +
-                        " for yes or "+TEXT_BOLD+"\"n\""+TEXT_RESET+" for no");
-                String removeFlag = sc.nextLine().toLowerCase();
-                switch (removeFlag){
-                    case "y":
-                        playerBoard.placeFlag(x,y);
-                        break;
-                }
-            } 
-            backendBoard.printBoard();
-            playerBoard.printBoard();
-
-            // ta in userinput war man vill undersöker etc.
-            round++;
+               round++;
 
             System.out.println("Get ready for round " + round + "!");
-            gameLoop();
 
         }
-
         while (playAgain());
-          
-
     }
-
-    private void gameLoop() {
+    private void gameLoop(int boardSize, int difficulty) {
+        backendBoard = new Board(boardSize, BoardType.BackendBoard);
+        playerBoard = new Board(boardSize, BoardType.PlayerBoard);
+        backendBoard.setUpBackendBoard(difficulty);
+        printNumberOfMinesAndMarkedMines();
+        backendBoard.printBoard();
+        playerBoard.printBoard();
+        /*backendBoard.setTotalMinesFromStart(boardSize,difficulty); */
         while (true){
+
+
+            System.out.println("If your want to "+TEXT_YELLOW+"check a field: "+TEXT_RESET+" \n" +
+                    "Enter coordinates on x and y and separate with space: \n");
+                 //   "If you want to"+TEXT_RED+" set or remove a flag"+TEXT_RESET+" type F \n");
+                   /* "Enter first \"F\" and without any " +
+                    "further space the coordinates on x and y and (separate those  with space): \n";*/
+
+            Scanner input = new Scanner(System.in);
+
+            String[] currentInput;
+            int[] coordinates = new int[2];
+
+            while(true) {
+
+                try {
+                    currentInput = input.nextLine().split(" ");
+
+                    for (int i = 0; i < 2; i++) {
+                        coordinates[i] = Integer.parseInt(currentInput[i]);
+                    }
+                    break;
+                } catch (NumberFormatException n) {
+                    System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
+                } catch(IndexOutOfBoundsException i) {
+                    System.out.println("Please enter TWO numbers; row and column.");
+                }
+            }
+            int x=coordinates[0];
+            int y=coordinates[1];
+            backendBoard.revealEmptySquares(x, y, playerBoard);
             playerBoard.printBoard();
+            if (backendBoard.checkIfMine(x,y))
+            {gameOver(x,y); break;}
+            //else if (playerBoard.checkWin()== true){
+              //  System.out.println("Who is awesome????? YOU ARE!!! Congrats you won!!");
+               // break;
+            //}
+                      } }
+
+
+
+
+
+
+
+            /*playerBoard.printBoard();
             System.out.println("Choose the X coordinate");
-            int catchX =  sc.nextInt();
+            int catchX = sc.nextInt();
             sc.nextLine();
             System.out.println("Choose the Y coordinate");
             int catchY = sc.nextInt();
             sc.nextLine();
 
             if(backendBoard.checkIfMine(catchX, catchY)){
-                gameOver(catchX,catchY);
-                break;
+                gameOver(catchX, catchY);
+
             }
             else {
-                playerBoard.setEmptySpace(catchX,catchY);
+                playerBoard.setEmptySpace(catchX, catchY);
             }
             //need to also check if we have won
+        }                 */
+
+
+    public  void setNRemoveFLag(int x, int y) {
+        if (playerBoard.isSquareFlag(x, y)) {
+            System.out.println("Do you want to remove the flag? press " + TEXT_BOLD + "\"y\"" + TEXT_RESET + "" +
+                    " for yes or " + TEXT_BOLD + "\"n\"" + TEXT_RESET + " for no");
+            String removeFlag = sc.nextLine().toLowerCase();
+            switch (removeFlag) {
+                case "y":
+                    playerBoard.placeFlag(x, y);
+                    break;
+            }
         }
     }
 
@@ -194,6 +234,8 @@ public class Game {
         wins++;
         System.out.println("Congratulations you won!!! \n Your total wins are" + wins);
     }
+
+// gör F+koordinaterna för flaggan och bara för att undersöka koordinates
 
 
 
