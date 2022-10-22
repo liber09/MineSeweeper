@@ -40,7 +40,6 @@ public class Game {
             backendBoard = new Board(boardSize, BoardType.BackendBoard);
             playerBoard = new Board(boardSize, BoardType.PlayerBoard);
             backendBoard.setUpBackendBoard(difficulty);
-            printNumberOfMinesAndMarkedMines();
             backendBoard.printBoard();
             playerBoard.printBoard();
             /*backendBoard.setTotalMinesFromStart(boardSize,difficulty); */
@@ -64,7 +63,7 @@ public class Game {
 
         // Outer loop, runs for each move the player makes
         while (true) {
-
+            printNumberOfMinesAndMarkedMines();
             // Inner loop, runs until the player enters correct input
             while (true) {
 
@@ -247,7 +246,7 @@ public class Game {
     }
     //Prints number of mines and number of marked mines to the user
     public void printNumberOfMinesAndMarkedMines(){
-        System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " of them.");
+        System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " suspected mines.");
     }
 
 
