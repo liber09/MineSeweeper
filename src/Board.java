@@ -164,6 +164,9 @@ public class Board {
     Sets up backendBoard with mines and numbers, using placeBombs and countBombs
      */
     public void setUpBackendBoard(int difficulty) {
+        int totalSquares = boardSize*boardSize;
+        totalMinesFromStart = totalSquares * difficulty;
+        totalMinesFromStart = totalMinesFromStart/100;
         placeBombs(boardSize, difficulty);
         for (int row = 0; row < boardSize; row++) {
             for (int column = 0; column < boardSize; column++) {
@@ -208,25 +211,19 @@ public class Board {
         return numberOfBombs;
     }
 
+    //Place bombs
     public void placeBombs(int boardSize, int totalMinesFromStart) {
         Random ran = new Random();
 
-        double percent = totalMinesFromStart / 100.0;
-        int boardslots = boardSize * boardSize;
-        double bombs = boardslots * percent;
-
-        for (int i = 0; i < bombs; i++) {
-
+        for (int i = 0; i < totalMinesFromStart; i++) {
             int x = ran.nextInt(boardSize);
             int y = ran.nextInt(boardSize);
-
-            board[x][y] = MINE;
-
+            if (validBombPlacement(x,y)){
+                board[x][y] = MINE;
+            }else{
+                i--;
+            }
         }
-        double bombsInt = Math.ceil(bombs);
-        this.totalMinesFromStart = (int) bombsInt; // detta är inte korrekt än!!¢
-        System.out.println(totalMinesFromStart);
-
     }
 
     public boolean validBombPlacement(int x, int y)
@@ -293,22 +290,9 @@ public class Board {
 
     }
 
-
     public boolean checkIfMine(int x, int y) {
         return checkSquare(x,y).equals(MINE);
     }
-
-  /*  public void setTotalMinesFromStart(int boardSize, int difficulty) {
-
-        double percent = difficulty/ 100.0;
-        int boardslots = boardSize * boardSize;
-        double bombs = boardslots * percent;
-        double bombsInt = Math.floor(bombs);
-      this.totalMinesFromStart = (int) bombsInt;
-      System.out.println(totalMinesFromStart);
-
-    }
-
 
   /*  public void setEmptySpace(int x, int y) {
         board[x][y] = EMPTY;

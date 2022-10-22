@@ -101,15 +101,19 @@ public class Game {
                         }
                             backendBoard.revealEmptySquares(coordinates[0], coordinates[1], playerBoard);
                             playerBoard.printBoard();
-                            if (backendBoard.checkIfMine(coordinates[0], coordinates[1])) {
-                                gameOver(coordinates[0], coordinates[1]);
-                                return;
-                            } else if(playerBoard.checkWin()) {
-                                System.out.println("Congratulations! You made it!");
-                                return;
+                            if (playerBoard.isSquareFlag(coordinates[0], coordinates[1])){
+                                System.out.println("There is a flag already on this position, please try another or remove flag first.");
+                                break;
+                            }else{
+                                if (backendBoard.checkIfMine(coordinates[0], coordinates[1])) {
+                                    gameOver(coordinates[0], coordinates[1]);
+                                    return;
+                                } else if(playerBoard.checkWin()) {
+                                    System.out.println("Congratulations! You made it!");
+                                    return;
+                                }
+                                break;
                             }
-                            break;
-
                     } catch (NumberFormatException n) {
                         System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
                     } catch (IndexOutOfBoundsException i) {
