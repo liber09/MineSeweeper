@@ -82,7 +82,6 @@ public class Game {
 
                 if (wannaPlaceFlag.equalsIgnoreCase("F")) {
                     try {
-
                         coordinates[0] = Integer.parseInt(currentInput[0].substring(1));
                         coordinates[1] = Integer.parseInt(currentInput[1]);
                         playerBoard.placeFlag(coordinates[0], coordinates[1]);
@@ -90,13 +89,13 @@ public class Game {
 
                     } catch (NumberFormatException n) {
                         System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
+
                     } catch (IndexOutOfBoundsException i) {
                         System.out.println("Please enter TWO numbers; row and column.");
                     }
 
                 } else {
                     try {
-
                         for (int i = 0; i < 2; i++) {
                             coordinates[i] = Integer.parseInt(currentInput[i]);
                         }
@@ -109,8 +108,8 @@ public class Game {
                                 System.out.println("Congratulations! You made it!");
                                 return;
                             }
+                            break;
 
-                        break;
                     } catch (NumberFormatException n) {
                         System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
                     } catch (IndexOutOfBoundsException i) {
