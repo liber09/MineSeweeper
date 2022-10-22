@@ -64,7 +64,7 @@ public class Board {
         else if(board[x][y].equals(FLAG)){
             board[x][y] = UNKNOWN;
         }
-        printBoard();
+
     }
     public void createBoard(BoardType type) {
         board = new String[boardSize][boardSize];
