@@ -167,7 +167,7 @@ public class Board {
         int totalSquares = boardSize*boardSize;
         totalMinesFromStart = totalSquares * difficulty;
         totalMinesFromStart = totalMinesFromStart/100;
-        placeBombs(boardSize, difficulty);
+        placeBombs();
         for (int row = 0; row < boardSize; row++) {
             for (int column = 0; column < boardSize; column++) {
                 int surroundingMines = countBombs(row, column);
@@ -212,7 +212,7 @@ public class Board {
     }
 
     //Place bombs
-    public void placeBombs(int boardSize, int totalMinesFromStart) {
+    public void placeBombs() {
         Random ran = new Random();
 
         for (int i = 0; i < totalMinesFromStart; i++) {
@@ -225,7 +225,7 @@ public class Board {
             }
         }
     }
-
+    // Check so that there is no mine in this position already
     public boolean validBombPlacement(int x, int y)
     { if (board[x][y].equals(MINE)){
         return false;
@@ -266,19 +266,25 @@ public class Board {
         If they are more than the totalMinesFromStart
         the player has not won. If they are equal, the player has cleared all unknown squares without mines and won the game.
      */
-    public boolean checkWin() {
+    public boolean checkWin(int totalMineCount) {
         int unKnownCounter = 0;
+        int flagCounter = 0;
         boolean hasPlayerWon = false;
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 if (board[i][j].equals(UNKNOWN)) {
                     unKnownCounter++;
                 }
-                if (unKnownCounter > totalMinesFromStart) {
-                    hasPlayerWon = false;
-                } else {
-                    hasPlayerWon = true;
+                if (board[i][j].equals(FLAG)){
+                    flagCounter++;
                 }
+            }
+        }
+        if ((unKnownCounter+flagCounter) == totalMineCount) {
+            if (flagCounter > totalMineCount){
+                //Player has to remove flags and check more positions.
+            }else{
+                hasPlayerWon = true;
             }
         }
         return hasPlayerWon;
