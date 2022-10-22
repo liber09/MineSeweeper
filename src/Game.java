@@ -71,33 +71,36 @@ public class Game {
 
 
 
-                    currentInput = input.nextLine().split(" ");
+            currentInput = input.nextLine().split(" ");
                     // ok den sätter första på index 1 andra på index2 så har jag två strings
 
-                    wannaPlaceFlag = currentInput[0].substring(0,1);
+            wannaPlaceFlag = currentInput[0].substring(0,1);
 
-                    if(wannaPlaceFlag.equalsIgnoreCase("F")){
+            if(wannaPlaceFlag.equalsIgnoreCase("F")){
+                try {
+
+                    int x= Integer.parseInt(currentInput[0].substring(1));
+                    int y= Integer.parseInt(currentInput[1]);
+                    playerBoard.placeFlag(x,y); break;
+                    } catch (NumberFormatException n) {
+                        System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
+                    } catch(IndexOutOfBoundsException i) {
+                        System.out.println("Please enter TWO numbers; row and column.");
+                    }
+
+                    } else {
                         try {
 
-                        int x= Integer.parseInt(currentInput[0].substring(1));
-                        int y= Integer.parseInt(currentInput[1]);
-                        playerBoard.placeFlag(x,y); break;
-                    } catch (NumberFormatException n) {
-                    System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
-                } catch(IndexOutOfBoundsException i) {
-                    System.out.println("Please enter TWO numbers; row and column.");
-                }
-
-                    } else {  try {
-
-                    for (int i = 0; i < 2; i++) {
-                        coordinates[i] = Integer.parseInt(currentInput[i]);
-                        int x=coordinates[0];
-                        int y=coordinates[1];
-                        backendBoard.revealEmptySquares(x, y, playerBoard);
-                        playerBoard.printBoard();
-                        if (backendBoard.checkIfMine(x,y))
-                        {gameOver(x,y);break;}
+                            for (int i = 0; i < 2; i++) {
+                                coordinates[i] = Integer.parseInt(currentInput[i]);
+                                int x=coordinates[0];
+                                int y=coordinates[1];
+                                backendBoard.revealEmptySquares(x, y, playerBoard);
+                                playerBoard.printBoard();
+                                if (backendBoard.checkIfMine(x,y)) {
+                                    gameOver(x,y);
+                                    break;
+                                }
                     }
                     break;
                 } catch (NumberFormatException n) {
@@ -105,8 +108,9 @@ public class Game {
                 } catch(IndexOutOfBoundsException i) {
                     System.out.println("Please enter TWO numbers; row and column.");
                 }
-            }}
             }
+        }
+    }
             //else if (playerBoard.checkWin()== true){
               //  System.out.println("Who is awesome????? YOU ARE!!! Congrats you won!!");
                // break;
