@@ -14,6 +14,7 @@ public class Game {
     public static final String TEXT_BOLD ="\033[0;1m";
     public void startGame(){
         int boardSize;
+        int difficulty;
         int round = 1;
         System.out.println("Hello! Welcome to"+ TEXT_BOLD+ TEXT_RED+"       * MI,  SW  **,  ER\n"+
                     "                      "+TEXT_RED+"  * '; "+TEXT_YELLOW+"NE *  EE"+TEXT_RED+"P' *  ;\n"+
@@ -34,8 +35,17 @@ public class Game {
 
         do {
             boardSize = chooseLayout();
-            int difficulty =chooseDifficulty();
-            gameLoop(boardSize,difficulty);
+            difficulty = chooseDifficulty();
+
+            backendBoard = new Board(boardSize, BoardType.BackendBoard);
+            playerBoard = new Board(boardSize, BoardType.PlayerBoard);
+            backendBoard.setUpBackendBoard(difficulty);
+            printNumberOfMinesAndMarkedMines();
+            backendBoard.printBoard();
+            playerBoard.printBoard();
+            /*backendBoard.setTotalMinesFromStart(boardSize,difficulty); */
+
+            gameLoop();
 
                round++;
 
@@ -44,69 +54,68 @@ public class Game {
         }
         while (playAgain());
     }
-    private void gameLoop(int boardSize, int difficulty) {
-        backendBoard = new Board(boardSize, BoardType.BackendBoard);
-        playerBoard = new Board(boardSize, BoardType.PlayerBoard);
-        backendBoard.setUpBackendBoard(difficulty);
-        printNumberOfMinesAndMarkedMines();
-        backendBoard.printBoard();
-        playerBoard.printBoard();
-        /*backendBoard.setTotalMinesFromStart(boardSize,difficulty); */
-        while (true){
+    private void gameLoop() {
+
+        Scanner input = new Scanner(System.in);
+        String[] currentInput;
+        int[] coordinates = new int[2];
+
+        String wannaPlaceFlag;
+
+        // Outer loop, runs for each move the player makes
+        while (true) {
+
+            // Inner loop, runs until the player enters correct input
+            while (true) {
+
+                System.out.println("If your want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
+                        "Enter coordinates on x and y and separate with space: \n" +
+                        "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n" +
+                        "Enter first \"F\" and without any " +
+                        "further space the coordinates on x and y and (separate those  with space): ");
 
 
-            System.out.println("If your want to "+TEXT_YELLOW+"check a field: "+TEXT_RESET+" \n" +
-                    "Enter coordinates on x and y and separate with space: \n"+
-                    "If you want to"+TEXT_RED+" set or remove a flag"+TEXT_RESET+ "\n"+
-                    "Enter first \"F\" and without any " +
-                    "further space the coordinates on x and y and (separate those  with space): ");
+                currentInput = input.nextLine().split(" ");
+                // ok den sätter första på index 1 andra på index2 så har jag två strings
 
-            Scanner input = new Scanner(System.in);
+                wannaPlaceFlag = currentInput[0].substring(0, 1);
 
-            String[] currentInput;
-            int[] coordinates = new int[2];
+                if (wannaPlaceFlag.equalsIgnoreCase("F")) {
+                    try {
 
-            String wannaPlaceFlag;
+                        coordinates[0] = Integer.parseInt(currentInput[0].substring(1));
+                        coordinates[1] = Integer.parseInt(currentInput[1]);
+                        playerBoard.placeFlag(coordinates[0], coordinates[1]);
+                        playerBoard.printBoard();
 
-
-
-
-            currentInput = input.nextLine().split(" ");
-                    // ok den sätter första på index 1 andra på index2 så har jag två strings
-
-            wannaPlaceFlag = currentInput[0].substring(0,1);
-
-            if(wannaPlaceFlag.equalsIgnoreCase("F")){
-                try {
-
-                    int x= Integer.parseInt(currentInput[0].substring(1));
-                    int y= Integer.parseInt(currentInput[1]);
-                    playerBoard.placeFlag(x,y); break;
                     } catch (NumberFormatException n) {
                         System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
-                    } catch(IndexOutOfBoundsException i) {
+                    } catch (IndexOutOfBoundsException i) {
                         System.out.println("Please enter TWO numbers; row and column.");
                     }
 
-                    } else {
-                        try {
+                } else {
+                    try {
 
-                            for (int i = 0; i < 2; i++) {
-                                coordinates[i] = Integer.parseInt(currentInput[i]);
-                                int x=coordinates[0];
-                                int y=coordinates[1];
-                                backendBoard.revealEmptySquares(x, y, playerBoard);
-                                playerBoard.printBoard();
-                                if (backendBoard.checkIfMine(x,y)) {
-                                    gameOver(x,y);
-                                    break;
-                                }
+                        for (int i = 0; i < 2; i++) {
+                            coordinates[i] = Integer.parseInt(currentInput[i]);
+                        }
+                            backendBoard.revealEmptySquares(coordinates[0], coordinates[1], playerBoard);
+                            playerBoard.printBoard();
+                            if (backendBoard.checkIfMine(coordinates[0], coordinates[1])) {
+                                gameOver(coordinates[0], coordinates[1]);
+                                return;
+                            } else if(playerBoard.checkWin()) {
+                                System.out.println("Congratulations! You made it!");
+                                return;
+                            }
+
+                        break;
+                    } catch (NumberFormatException n) {
+                        System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
+                    } catch (IndexOutOfBoundsException i) {
+                        System.out.println("Please enter TWO numbers; row and column.");
                     }
-                    break;
-                } catch (NumberFormatException n) {
-                    System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
-                } catch(IndexOutOfBoundsException i) {
-                    System.out.println("Please enter TWO numbers; row and column.");
                 }
             }
         }
@@ -147,7 +156,7 @@ public class Game {
         System.out.println(
                 " How large do you want your board to be?\n " +
                         "You can choose between a scale of 6x6 to 40x40!\n " +
-                        "Please type "+TEXT_BOLD+" 6 for 6x6, 8 for 8x8 "+ TEXT_RESET+"and so on.");
+                        "Please type "+TEXT_BOLD+"6 for 6x6, 8 for 8x8 "+ TEXT_RESET+"and so on.");
         boolean validAnswer = true;
 
         int scale = 0;
