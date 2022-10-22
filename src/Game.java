@@ -108,7 +108,7 @@ public class Game {
                                 if (backendBoard.checkIfMine(coordinates[0], coordinates[1])) {
                                     gameOver(coordinates[0], coordinates[1]);
                                     return;
-                                } else if(playerBoard.checkWin()) {
+                                } else if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart())) {
                                     System.out.println("Congratulations! You made it!");
                                     return;
                                 }
