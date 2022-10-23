@@ -76,7 +76,10 @@ public class Game {
 
                 currentInput = input.nextLine().split(" ");
                 // ok den sätter första på index 1 andra på index2 så har jag två strings
-
+                if(currentInput.length == 1){
+                    System.out.println("Input is needed, please try again");
+                    continue;
+                }
                 wannaPlaceFlag = currentInput[0].substring(0, 1);
 
                 if (wannaPlaceFlag.equalsIgnoreCase("F")) {
