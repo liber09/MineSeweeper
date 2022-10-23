@@ -5,11 +5,12 @@ public class Board {
     private String[][] board; //Contains the board.
     private int totalMinesFromStart;
     private BoardType type;
-    private final String UNKNOWN = TEXT_GREEN+"#"+TEXT_RESET; //Hidden square
-    private final String MINE = TEXT_RED +"*"+TEXT_RESET; //Mine square
-    private final String FLAG = TEXT_RED+"F"+TEXT_RESET; //User suspects mine square
+    private final String UNKNOWN = TEXT_GREEN+"\u25af"+TEXT_RESET; //Hidden square
+    private final String MINE = TEXT_RED+"\u2638"+TEXT_RESET; //Mine square
+    private final String FLAG = TEXT_LIGHTRED+"\u2691"+TEXT_RESET; //User suspects mine square
     private final String EMPTY = " "; //Empty square
     public static final String TEXT_RED = "\u001B[31m";
+    public static final String TEXT_LIGHTRED = "\u001B[91m";
     public static final String TEXT_GREEN = "\u001B[32m";
     public static final String TEXT_RESET = "\u001B[0m";
     /*

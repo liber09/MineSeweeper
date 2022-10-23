@@ -1,11 +1,10 @@
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Game {
     Board playerBoard; //The board that is visible to the player
     Board backendBoard; //The board in the background, handling mine positions etc
     Scanner sc = new Scanner(System.in);
-
-
     public static final String TEXT_RED = "\u001B[31m";
     public static final String TEXT_BLUE = "\u001B[34m";
     public static final String TEXT_RESET = "\u001B[0m";
@@ -16,19 +15,22 @@ public class Game {
         int boardSize;
         int difficulty;
         int round = 1;
-        System.out.println("Hello! Welcome to"+ TEXT_BOLD+ TEXT_RED+"       * MI,  SW  **,  ER\n"+
-                    "                      "+TEXT_RED+"  * '; "+TEXT_YELLOW+"NE *  EE"+TEXT_RED+"P' *  ;\n"+
-                    "                       *;"+TEXT_YELLOW+" * ' *"+TEXT_RED+" ; *!'\n"+
-                    "                         * *"+TEXT_YELLOW+"*;*;"+TEXT_RED+";*,\n" +
-                    "                        "+TEXT_WHITE+"/  "+TEXT_RED+"* ; * \n" +
-                    "                  "+TEXT_WHITE+"    /   \n" +
-                    "           "+TEXT_BLUE+"         _"+TEXT_WHITE+"s"+TEXT_BLUE+"_       \n"+
-                    "                   OOOO  \\\n" +
-                    "               OOOOOOOOOOOO \\\n"+
-                    "             OOOOOOOOOOOOOOOO \\\n" +
-                    "            OOOOOOOOOOOOOOOOOO )\n" +
-                    "            OOOOOOOOOOOOOOOOOO )\n" +
-                    "              OOOOOOOOOOOOOO  )\n" +
+
+
+        System.out.println("              "+TEXT_RED+"                 *    *       ; * . \n"+ TEXT_RESET+
+                    "Hello! \uD83D\uDCA3 Welcome to"+ TEXT_BOLD+ TEXT_RED+"        * MI,  SW  **,  ER\n"+
+                    "                       "+TEXT_RED+"  * '; "+TEXT_YELLOW+"NE *  EE"+TEXT_RED+"P' *  ;\n"+
+                    "                        *;"+TEXT_YELLOW+" * ' *"+TEXT_RED+" ; *!'\n"+
+                    "                          * *"+TEXT_YELLOW+"*;*;"+TEXT_RED+";*,\n" +
+                    "                         "+TEXT_WHITE+"/  "+TEXT_RED+"* ; * \n" +
+                    "                   "+TEXT_WHITE+"    /   \n" +
+                    "            "+TEXT_BLUE+"         _"+TEXT_WHITE+"s"+TEXT_BLUE+"_       \n"+
+                    "                    OOOO  \\\n" +
+                    "               OOOOO OOOOOOO \\\n"+
+                    "             OOOOO OOOOOOOOOOO \\\n" +
+                    "            OOOO  O T L L J OOO )\n" +
+                    "            OOOO  OOOOOOOOOOOOO )\n" +
+                    "              OOOO OOOOOOOOOO  )\n" +
                     "                OOOOOOOOOO  )\n"+TEXT_RESET);
 
 
@@ -68,7 +70,7 @@ public class Game {
             while (true) {
 
                 System.out.println("If your want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
-                        "Enter coordinates on x and y and separate with space: \n" +
+                        "Enter coordinates on x and y and separate with space. \n" +
                         "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n" +
                         "Enter first \"F\" and without any " +
                         "further space the coordinates on x and y and (separate those  with space): ");
@@ -108,7 +110,9 @@ public class Game {
                                     gameOver(coordinates[0], coordinates[1]);
                                     return;
                                 } else if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart())) {
-                                    System.out.println("Congratulations! You made it!");
+                                    System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
+                                    wins++;
+                                    System.out.println("Your total wins are: " + wins);
                                     return;
                                 }
                                 break;
@@ -122,12 +126,6 @@ public class Game {
             }
         }
     }
-            //else if (playerBoard.checkWin()== true){
-              //  System.out.println("Who is awesome????? YOU ARE!!! Congrats you won!!");
-               // break;
-            //}
-
-
 
 
 
@@ -157,8 +155,8 @@ public class Game {
     public int chooseLayout() {
         System.out.println(
                 " How large do you want your board to be?\n " +
-                        "You can choose between a scale of 6x6 to 40x40!\n " +
-                        "Please type "+TEXT_BOLD+"6 for 6x6, 8 for 8x8 "+ TEXT_RESET+"and so on.");
+                        "You can choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n " +
+                        "Please type "+TEXT_BOLD+TEXT_YELLOW+"6 for 6x6, 8 for 8x8 "+ TEXT_RESET+"and so on.");
         boolean validAnswer = true;
 
         int scale = 0;
@@ -170,11 +168,11 @@ public class Game {
                     validAnswer = true;
                 }
                 if (boardScale < 6 || boardScale > 40) {
-                    System.out.println("Not a valid choice! Please choose a number between 6 and 99");
+                    System.out.println("Not a valid choice! Please choose a number between 6 and 40");
                     validAnswer = false;
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("Not a valid choice! Please choose a number between 6 and 99");
+                System.out.println("Not a valid choice! Please choose a number between 6 and 40");
                 validAnswer = false;
             }
         } while (!validAnswer);
@@ -184,7 +182,7 @@ public class Game {
 
     protected int chooseDifficulty() {
         System.out.println("GREAT CHOICE! What level of difficulty do you choose?\n" +
-                "Please press \"e\" for easy, \"m\" for medium and \"h\" for hard!");
+                "Please press "+TEXT_YELLOW +"\"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
 
         boolean validChoiceDifficulty;
         int difficulty = 0;
@@ -206,7 +204,7 @@ public class Game {
                 }
                 default -> {
                     System.out.println("That's not a valid answer, " +
-                            "please choose between \"e\" for easy, \"m\" for medium and \"h\" for hard!");
+                            "please choose between"+TEXT_YELLOW+" \"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
                     validChoiceDifficulty = false;
                 }
             }
@@ -219,7 +217,7 @@ public class Game {
         boolean validAnswer;
 
         do {
-            System.out.println("Wanna play again? Type \"c\" for continue, type \"q\" to quit");
+            System.out.println("Wanna play again? Type "+TEXT_YELLOW+"\"c\" for continue,"+TEXT_RED+"type \"q\" to quit"+TEXT_RESET);
             String playAgain = sc.nextLine();
 
             if (playAgain.equalsIgnoreCase("c")) {
@@ -241,7 +239,7 @@ public class Game {
     }
 
     public void gameOver(int x, int y){
-        System.out.println("BOOM!! X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
+        System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
         backendBoard.printBoard();
     }
     //Prints number of mines and number of marked mines to the user
@@ -257,9 +255,6 @@ public class Game {
         wins++;
         System.out.println("Congratulations you won!!! \n Your total wins are" + wins);
     }
-
-// gör F+koordinaterna för flaggan och bara för att undersöka koordinates
-
 
 
 }
