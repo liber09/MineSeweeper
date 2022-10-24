@@ -73,23 +73,14 @@ public class Game {
             // Inner loop, runs until the player enters correct input
 
             while (true) {
-               if (hint>0){System.out.println("Hints left:"+hint+" Do you want a hint? press \"h\", press anything else to continue");
-                    String wantHint = sc.nextLine();
-                    if (wantHint.equalsIgnoreCase("h")){
-                        backendBoard.hint(playerBoard);
-                        playerBoard.printBoard();
-                        hint--;
-                    } }
-                System.out.println("If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
-                        "Enter coordinates on x and y and separate with space. \n" +
-                        "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
-                        "Enter first \"F\" and without any " +
-                        "further space the coordinates on x and y and (separate those  with space): \n" +
-                        "If you want to give up, please type q"
-                );
-
+                System.out.println(getInstructions(hint));
 
                 String rawInput = input.nextLine();
+                if (rawInput.equalsIgnoreCase("h") && hint > 0){
+                    backendBoard.hint(playerBoard);
+                    playerBoard.printBoard();
+                    hint--;
+                }
                 if(rawInput.equals("q")){
                     System.out.println("Sad you gave up so easy!");
                     gaveUp = true;
@@ -152,8 +143,26 @@ public class Game {
         }
     }
 
-
-
+    private String getInstructions(int hintsLeft){
+        String instructions;
+        if (hintsLeft > 0){
+            instructions = "If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
+                    "Enter coordinates on x and y and separate with space. \n" +
+                    "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
+                    "Enter first \"F\" and without any " +
+                    "further space the coordinates on x and y and (separate those with space): \n" +
+                    "Hints left:"+hintsLeft+" Do you want a hint? press \"h\"\n" +
+                    "If you want to give up, please type q";
+        }else{
+            instructions = "If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
+                    "Enter coordinates on x and y and separate with space. \n" +
+                    "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
+                    "Enter first \"F\" and without any " +
+                    "further space the coordinates on x and y and (separate those with space): \n" +
+                    "If you want to give up, please type q";
+        }
+        return instructions;
+    }
 
     public int chooseLayout() {
         System.out.println(
