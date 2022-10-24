@@ -7,10 +7,10 @@ public class Board {
     private BoardType type;
     private final String UNKNOWN = TEXT_GREEN+"\u25af"+TEXT_RESET; //Hidden square
     private final String MINE = TEXT_RED+"\u2638"+TEXT_RESET; //Mine square
-    private final String FLAG = TEXT_LIGHTRED+"\u2691"+TEXT_RESET; //User suspects mine square
+    private final String FLAG = TEXT_LIGHT_RED +"\u2691"+TEXT_RESET; //User suspects mine square
     private final String EMPTY = " "; //Empty square
     public static final String TEXT_RED = "\u001B[31m";
-    public static final String TEXT_LIGHTRED = "\u001B[91m";
+    public static final String TEXT_LIGHT_RED = "\u001B[91m";
     public static final String TEXT_GREEN = "\u001B[32m";
     public static final String TEXT_RESET = "\u001B[0m";
     /*
@@ -26,13 +26,6 @@ public class Board {
         createBoard(type);
     }
 
-    public void setBoardSize(int boardSize) {
-        this.boardSize = boardSize;
-    }
-
-    public int getBoardSize() {
-        return this.boardSize;
-    }
     //return the number of mines on the board.
     public int getTotalMinesFromStart(){
         return this.totalMinesFromStart;
@@ -51,6 +44,7 @@ public class Board {
     }
 
     //Checks a square to see if it contains a flag, if so return true, otherwise return false.
+    
     public Boolean isSquareFlag(int x, int y){
         if (checkSquare(x,y).equals(FLAG)){
             return true;
@@ -167,7 +161,7 @@ public class Board {
     public void setUpBackendBoard(int difficulty) {
         int totalSquares = boardSize*boardSize;
         totalMinesFromStart = totalSquares * difficulty;
-        totalMinesFromStart = totalMinesFromStart/100;
+        totalMinesFromStart = totalMinesFromStart/100; ///
         placeBombs();
         for (int row = 0; row < boardSize; row++) {
             for (int column = 0; column < boardSize; column++) {
@@ -280,7 +274,7 @@ public class Board {
                     flagCounter++;
                 }
             }
-        }
+        } //KANSKE en method som ge vinst när man har flaggat för alla
         if ((unKnownCounter+flagCounter) == totalMineCount) {
             if (flagCounter > totalMineCount){
                 //Player has to remove flags and check more positions.
@@ -292,16 +286,13 @@ public class Board {
     }
 
     //Call createNewBoard to reset the gameBoard, use boardType to get correct initial layout.
-    public void resetBoard() {
-        createBoard(this.type);
+     // public void resetBoard() {
+        //createBoard(this.type);
 
-    }
+    // }
 
     public boolean checkIfMine(int x, int y) {
         return checkSquare(x,y).equals(MINE);
     }
 
-  /*  public void setEmptySpace(int x, int y) {
-        board[x][y] = EMPTY;
-    } */
 }
