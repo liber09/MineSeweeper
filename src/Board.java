@@ -1,14 +1,13 @@
 import java.util.Random;
-
 public class Board {
-    private int boardSize; //The size of the board.
+    protected int boardSize; //The size of the board.
     private String[][] board; //Contains the board.
     private int totalMinesFromStart;
     private BoardType type;
-    private final String UNKNOWN = TEXT_GREEN+"\u25af"+TEXT_RESET; //Hidden square
+    protected final String UNKNOWN = TEXT_GREEN+"\u25af"+TEXT_RESET; //Hidden square
     private final String MINE = TEXT_RED+"\u2638"+TEXT_RESET; //Mine square
     private final String FLAG = TEXT_LIGHT_RED +"\u2691"+TEXT_RESET; //User suspects mine square
-    private final String EMPTY = " "; //Empty square
+    protected final String EMPTY = " "; //Empty square
     public static final String TEXT_RED = "\u001B[31m";
     public static final String TEXT_LIGHT_RED = "\u001B[91m";
     public static final String TEXT_GREEN = "\u001B[32m";
@@ -206,6 +205,7 @@ public class Board {
         return numberOfBombs;
     }
 
+
     //Place bombs
     public void placeBombs() {
         Random ran = new Random();
@@ -284,6 +284,26 @@ public class Board {
         }
         return hasPlayerWon;
     }
+
+    public void hint(Board PlayerBoard ){
+        Random ran = new Random();
+
+        int x = ran.nextInt(boardSize);
+        int y = ran.nextInt(boardSize);
+
+
+        if (checkIfMine(x, y)|| !PlayerBoard.checkSquare(x,y).equals(UNKNOWN))
+              {
+            hint(PlayerBoard);
+
+        }
+
+        else {revealEmptySquares(x,y, PlayerBoard);}}
+
+
+
+
+
 
     //Call createNewBoard to reset the gameBoard, use boardType to get correct initial layout.
      // public void resetBoard() {
