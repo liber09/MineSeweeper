@@ -66,13 +66,13 @@ public class Game {
 
         String wannaPlaceFlag;
         boolean gaveUp = false;
+        int hint = 3;
         // Outer loop, runs for each move the player makes
         while (true) {
             printNumberOfMinesAndMarkedMines();
             // Inner loop, runs until the player enters correct input
 
             while (true) {
-                int hint = 3;
                if (hint>0){System.out.println("Hints left:"+hint+" Do you want a hint? press \"h\", press anything else to continue");
                     String wantHint = sc.nextLine();
                     if (wantHint.equalsIgnoreCase("h")){
