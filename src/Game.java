@@ -1,4 +1,4 @@
-import java.io.PrintWriter;
+
 import java.util.Scanner;
 
 public class Game {
@@ -219,13 +219,13 @@ public class Game {
     public boolean playAgain() {
         boolean validAnswer;
 
-        do {
+        while(true){
             System.out.println("Wanna play again? Type "+TEXT_YELLOW+"\"c\" for continue,"+TEXT_RED+"type \"q\" to quit"+TEXT_RESET);
             String playAgain = sc.nextLine();
 
             if (playAgain.equalsIgnoreCase("c")) {
-                playerBoard.resetBoard();
-                backendBoard.resetBoard();
+               // playerBoard.resetBoard();
+               // backendBoard.resetBoard(); behövs inte
                 return true;
 
             } else if (playAgain.equalsIgnoreCase("q")) {
@@ -237,9 +237,7 @@ public class Game {
                 validAnswer = false;
             }
 
-        } while (!validAnswer);
-        return true;
-    }
+    }}
 
     public void gameOver(int x, int y){
         System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
@@ -252,12 +250,7 @@ public class Game {
 
 
     static int wins = 0;
-    public static void winCounter(String name) {
 
-        // if checkwin is true
-        wins++;
-        System.out.println("Congratulations you won!!! \n Your total wins are" + wins);
-    }
 
 
 }
