@@ -46,11 +46,12 @@ public class Game {
             playerBoard.printBoard();
             /*backendBoard.setTotalMinesFromStart(boardSize,difficulty); */
 
+            System.out.println("Get ready for round " + round + "!");
             gameLoop();
 
-               round++;
+            round++;
 
-            System.out.println("Get ready for round " + round + "!");
+
 
         }
         while (playAgain());
@@ -62,7 +63,7 @@ public class Game {
         int[] coordinates = new int[2];
 
         String wannaPlaceFlag;
-
+        boolean gaveUp = false;
         // Outer loop, runs for each move the player makes
         while (true) {
             printNumberOfMinesAndMarkedMines();
@@ -73,10 +74,18 @@ public class Game {
                         "Enter coordinates on x and y and separate with space. \n" +
                         "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n" +
                         "Enter first \"F\" and without any " +
-                        "further space the coordinates on x and y and (separate those  with space): ");
+                        "further space the coordinates on x and y and (separate those  with space): \n" +
+                        "If you want to give up, please type q"
+                );
 
 
-                currentInput = input.nextLine().split(" ");
+                String rawInput = input.nextLine();
+                if(rawInput.equals("q")){
+                    System.out.println("Sad you gave up so easy!");
+                    gaveUp = true;
+                    break;
+                }
+                currentInput = rawInput.split(" ");
                 // ok den sätter första på index 1 andra på index2 så har jag två strings
                 if(currentInput.length == 1){
                     System.out.println("Input is needed, please try again");
@@ -126,6 +135,9 @@ public class Game {
                         System.out.println("Please enter TWO numbers; row and column.");
                     }
                 }
+            }
+            if(gaveUp){
+                break;
             }
         }
     }
