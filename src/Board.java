@@ -44,7 +44,7 @@ public class Board {
     }
 
     //Checks a square to see if it contains a flag, if so return true, otherwise return false.
-    
+
     public Boolean isSquareFlag(int x, int y){
         if (checkSquare(x,y).equals(FLAG)){
             return true;
