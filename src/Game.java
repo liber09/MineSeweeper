@@ -1,4 +1,6 @@
 
+import java.util.IllegalFormatCodePointException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -68,11 +70,19 @@ public class Game {
         while (true) {
             printNumberOfMinesAndMarkedMines();
             // Inner loop, runs until the player enters correct input
-            while (true) {
 
-                System.out.println("If your want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
+            while (true) {
+                int hint = 3;
+               if (hint>0){System.out.println("Hints left:"+hint+" Do you want a hint? press \"h\", press anything else to continue");
+                    String wantHint = sc.nextLine();
+                    if (wantHint.equalsIgnoreCase("h")){
+                        backendBoard.hint(playerBoard);
+                        playerBoard.printBoard();
+                        hint--;
+                    } }
+                System.out.println("If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
                         "Enter coordinates on x and y and separate with space. \n" +
-                        "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n" +
+                        "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
                         "Enter first \"F\" and without any " +
                         "further space the coordinates on x and y and (separate those  with space): \n" +
                         "If you want to give up, please type q"
@@ -145,28 +155,6 @@ public class Game {
 
 
 
-
-
-            /*playerBoard.printBoard();
-            System.out.println("Choose the X coordinate");
-            int catchX = sc.nextInt();
-            sc.nextLine();
-            System.out.println("Choose the Y coordinate");
-            int catchY = sc.nextInt();
-            sc.nextLine();
-
-            if(backendBoard.checkIfMine(catchX, catchY)){
-                gameOver(catchX, catchY);
-
-            }
-            else {
-                playerBoard.setEmptySpace(catchX, catchY);
-            }
-            //need to also check if we have won
-        }                 */
-
-
-
     public int chooseLayout() {
         System.out.println(
                 " How large do you want your board to be?\n " +
@@ -229,10 +217,10 @@ public class Game {
     }
 
     public boolean playAgain() {
-        boolean validAnswer;
+
 
         while(true){
-            System.out.println("Wanna play again? Type "+TEXT_YELLOW+"\"c\" for continue,"+TEXT_RED+"type \"q\" to quit"+TEXT_RESET);
+            System.out.println("Wanna play again? Type "+TEXT_YELLOW+"\"c\" for continue,"+TEXT_RED+" type \"q\" to quit"+TEXT_RESET);
             String playAgain = sc.nextLine();
 
             if (playAgain.equalsIgnoreCase("c")) {
@@ -246,7 +234,7 @@ public class Game {
                 return false;
             } else {
                 System.out.println("Not a valid answer");
-                validAnswer = false;
+
             }
 
     }}
@@ -263,6 +251,7 @@ public class Game {
 
     static int wins = 0;
 
+    }
 
 
-}
+
