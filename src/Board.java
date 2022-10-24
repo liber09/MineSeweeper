@@ -261,7 +261,7 @@ public class Board {
         If they are more than the totalMinesFromStart
         the player has not won. If they are equal, the player has cleared all unknown squares without mines and won the game.
      */
-    public boolean checkWin(int totalMineCount) {
+    public boolean checkWin(int totalMineCount, Board backendBoard) {
         int unKnownCounter = 0;
         int flagCounter = 0;
         boolean hasPlayerWon = false;
@@ -270,18 +270,17 @@ public class Board {
                 if (board[i][j].equals(UNKNOWN)) {
                     unKnownCounter++;
                 }
-                if (board[i][j].equals(FLAG)){
+                if (board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(MINE)){
                     flagCounter++;
                 }
             }
         } //KANSKE en method som ge vinst när man har flaggat för alla
-        if ((unKnownCounter+flagCounter) == totalMineCount) {
-            if (flagCounter > totalMineCount){
-                //Player has to remove flags and check more positions.
-            }else{
-                hasPlayerWon = true;
-            }
+        if ((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount) {
+
+            hasPlayerWon = true;
+
         }
+        System.out.println(flagCounter);
         return hasPlayerWon;
     }
 

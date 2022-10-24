@@ -122,21 +122,23 @@ public class Game {
                                 if (backendBoard.checkIfMine(coordinates[0], coordinates[1])) {
                                     gameOver(coordinates[0], coordinates[1]);
                                     return;
-                                } else if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart())) {
-                                    System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
-                                    wins++;
-                                    System.out.println("Your total wins are: " + wins);
-                                    return;
                                 }
-                                break;
                             }
                     } catch (NumberFormatException n) {
                         System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
                     } catch (IndexOutOfBoundsException i) {
                         System.out.println("Please enter TWO numbers; row and column.");
                     }
+
+                }
+                if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart(), backendBoard)) {
+                    System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
+                    wins++;
+                    System.out.println("Your total wins are: " + wins);
+                    return;
                 }
             }
+
             if(gaveUp){
                 break;
             }
