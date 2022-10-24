@@ -76,7 +76,7 @@ public class Game {
                 System.out.println(getInstructions(hint));
 
                 String rawInput = input.nextLine();
-                if (rawInput.equalsIgnoreCase("h")){
+                if (rawInput.equalsIgnoreCase("h") && hint > 0){
                     backendBoard.hint(playerBoard);
                     playerBoard.printBoard();
                     hint--;
