@@ -75,6 +75,7 @@ public class Game {
 
                 String rawInput = input.nextLine();
                 if (rawInput.equalsIgnoreCase("h") && hint > 0){
+                    backendBoard.hint(playerBoard);
                     playerBoard.printBoard();
                     hint--;
                     continue;
@@ -160,13 +161,13 @@ public class Game {
                     "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
                     "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n\n" +
                     "Hints left:"+hintsLeft+" Do you want a hint? press \"h\"\n" +
-                    "If you want to give up, please type q";
+                    "If you want to give up, please type \"q\""+TEXT_RESET;
         }else{
             instructions = "Want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET +
                     "Enter coordinates  x and y, separate with space. \n" +
                     "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
                     "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n" +
-                    "Want to give up, please " + TEXT_RED + " type q";
+                    "Want to give up, please " + TEXT_RED + " type \"q\""+TEXT_RESET;
         }
         return instructions;
     }
