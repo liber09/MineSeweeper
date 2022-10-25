@@ -63,10 +63,12 @@ public class Game {
         Scanner input = new Scanner(System.in);
         String[] currentInput;
         int[] coordinates = new int[2];
+        Countdown Count = new Countdown();
 
         String wannaPlaceFlag;
         boolean gaveUp = false;
         int hint = 3;
+        boolean timeUp = false;
         // Outer loop, runs for each move the player makes
         while (true) {
             printNumberOfMinesAndMarkedMines();
@@ -75,6 +77,13 @@ public class Game {
             while (true) {
                 System.out.println(getInstructions(hint));
 
+                Count.remainingTime();
+                if(Count.timesUp()){
+                    timeIsUp();
+                    timeUp = true;
+                    break;
+
+                }
                 String rawInput = input.nextLine();
                 if (rawInput.equalsIgnoreCase("h") && hint > 0){
                     backendBoard.hint(playerBoard);
@@ -252,6 +261,10 @@ public class Game {
 
     public void gameOver(int x, int y){
         System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
+        backendBoard.printBoard();
+    }
+    public void timeIsUp(){
+        System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" your time was up - GAME OVER");
         backendBoard.printBoard();
     }
     //Prints number of mines and number of marked mines to the user
