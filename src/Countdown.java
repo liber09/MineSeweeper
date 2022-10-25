@@ -21,7 +21,7 @@ public class Countdown {
                 }
                 if (timer == -1){
 
-                    System.out.println("TIME IS UP - GAME OVER");
+
                     TimerA.cancel();
 
 
@@ -39,13 +39,14 @@ public class Countdown {
 return timer;
 
     }
-public boolean timesUp(){
+
+public boolean timesLeft(){
 
         if (timer==-1){
-            return true;
+            return false;
 
         }
-        return false;
+        return true;
 
 }
 

@@ -1,6 +1,4 @@
 
-import java.util.IllegalFormatCodePointException;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -77,17 +75,15 @@ public class Game {
 
 
             while (true) {
-                System.out.println(Count.remainingTime()+" seconds left");
+                if(Count.timesLeft()){
+                System.out.println(Count.remainingTime()+" seconds left");} else {
+                    timeIsUp();
+                    return;
+
+                }
                 System.out.println(getInstructions(hint));
 
-               /*
 
-                } */
-                if(Count.timesUp()){
-                    timeIsUp();
-                    timeUp = true;
-
-                    break;}
 
                 String rawInput = input.nextLine();
                 if (rawInput.equalsIgnoreCase("h") && hint > 0){
@@ -152,7 +148,7 @@ public class Game {
                     System.out.println("Your total wins are: " + wins);
                     return;
                 }
-            }if (timeUp){ break;}
+            }
 
             if(gaveUp){
                 break;
