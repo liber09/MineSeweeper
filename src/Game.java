@@ -263,5 +263,4 @@ public class Game {
     }
     int counter =30;
     static int wins = 0;
-
 }
