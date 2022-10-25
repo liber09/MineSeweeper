@@ -49,23 +49,31 @@ public class Game {
     private void gameLoop() {
         Scanner input = new Scanner(System.in);
         String[] currentInput;
-        int[] coordinates;
-
         String wannaPlaceFlag;
-        boolean gaveUp = false;
         int hint = 3; //Player is given three hint possibilities each round
+        int[] coordinates;
+        Countdown Count = new Countdown();
+        Count.counter(counter);
+        boolean timeUp = false;
+        boolean gaveUp = false;
         // Outer loop, runs for each move the player makes
         while (true) {
             printNumberOfMinesAndMarkedMines();
             // Inner loop, runs until the player enters correct input
-            while (true) {
-                System.out.println(getInstructions(hint));
 
+            while (true) {
+                if(Count.timesLeft()){
+                System.out.println(Count.remainingTime()+" seconds left");} else {
+                    timeIsUp();
+                    return;
+                }
+                System.out.println(getInstructions(hint));
                 String rawInput = input.nextLine();
                 if (rawInput.equalsIgnoreCase("h") && hint > 0){
                     backendBoard.hint(playerBoard);
                     playerBoard.printBoard();
                     hint--;
+                    continue;
                 }
                 if(rawInput.equals("q")){
                     System.out.println("Sad you gave up so easy!");
@@ -74,9 +82,26 @@ public class Game {
                 }
                 try{
                     currentInput = rawInput.split(" ");
-                    if (currentInput.length == 1){
+                    // ok den sätter första på index 1 andra på index2 så har jag två strings
+                    if(currentInput.length == 1){
+                        ;
                         System.out.println("Input is needed, please try again");
                         continue;
+                    }
+                    wannaPlaceFlag = currentInput[0].substring(0, 1);
+
+                    if (wannaPlaceFlag.equalsIgnoreCase("F")) {
+                        try {
+                            coordinates[0] = Integer.parseInt(currentInput[0].substring(1));
+                            coordinates[1] = Integer.parseInt(currentInput[1]);
+                            playerBoard.placeFlag(coordinates[0], coordinates[1]);
+                            playerBoard.printBoard();
+
+                        } catch (NumberFormatException n) {
+                            System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
+
+                        } catch (IndexOutOfBoundsException i) {
+                        System.out.println("Please enter TWO numbers; row and column.");
                     }
                     wannaPlaceFlag = currentInput[0].substring(0, 1);
                     if (wannaPlaceFlag.equalsIgnoreCase("F")) {
@@ -147,20 +172,18 @@ public class Game {
     private String getInstructions(int hintsLeft){
         String instructions;
         if (hintsLeft > 0){
-            instructions = "If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
-                    "Enter coordinates on x and y and separate with space. \n" +
-                    "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
-                    "Enter first \"F\" and without any " +
-                    "further space the coordinates on x and y and (separate those with space): \n" +
+            instructions = "Want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET +
+                    "Enter coordinates  x and y, separate with space. \n" +
+                    "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
+                    "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n\n" +
                     "Hints left:"+hintsLeft+" Do you want a hint? press \"h\"\n" +
                     "If you want to give up, please type q";
         }else{
-            instructions = "If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
-                    "Enter coordinates on x and y and separate with space. \n" +
-                    "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
-                    "Enter first \"F\" and without any " +
-                    "further space the coordinates on x and y and (separate those with space): \n" +
-                    "If you want to give up, please type q";
+            instructions = "Want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET +
+                    "Enter coordinates  x and y, separate with space. \n" +
+                    "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
+                    "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n" +
+                    "Want to give up, please " + TEXT_RED + " type q";
         }
         return instructions;
     }
@@ -168,9 +191,9 @@ public class Game {
     //What size of board does the player want, 6x6 to 40x40 is possible.
     public int chooseLayout() {
         System.out.println(
-                " How large do you want your board to be?\n " +
-                        "You can choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n " +
-                        "Please type "+TEXT_BOLD+TEXT_YELLOW+"6 for 6x6, 8 for 8x8 "+ TEXT_RESET+"and so on.");
+                " How large shall your board be?\n " +
+                        "Choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n " +
+                        "Type "+TEXT_BOLD+TEXT_YELLOW+"\"6\" for 6x6, \"7\" for 7x7 "+ TEXT_RESET+"and so on.");
         boolean validAnswer = true;
 
         int scale = 0;
@@ -196,8 +219,7 @@ public class Game {
 
     //What difficulty does the player want, options are easy(10 percent mines), medium(15 percent mines) hard(20 percent mines)
     protected int chooseDifficulty() {
-        System.out.println("GREAT CHOICE! What level of difficulty do you choose?\n" +
-                "Please press "+TEXT_YELLOW +"\"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
+        System.out.println("GREAT CHOICE! Choose your level of difficulty:" + TEXT_YELLOW +"\"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
 
         boolean validChoiceDifficulty;
         int difficulty = 0;
@@ -248,9 +270,15 @@ public class Game {
         System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
         backendBoard.printBoard();
     }
+    public void timeIsUp(){
+        System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" your time was up - GAME OVER");
+        backendBoard.printBoard();
+    }
     //Prints number of mines and number of marked mines to the user
     public void printNumberOfMinesAndMarkedMines(){
         System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " suspected mines.");
     }
+
+    int counter = 30;
     static int wins = 0;
     }
