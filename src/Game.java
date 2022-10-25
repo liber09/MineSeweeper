@@ -80,6 +80,7 @@ public class Game {
                     backendBoard.hint(playerBoard);
                     playerBoard.printBoard();
                     hint--;
+                    continue;
                 }
                 if(rawInput.equals("q")){
                     System.out.println("Sad you gave up so easy!");
@@ -148,29 +149,27 @@ public class Game {
     private String getInstructions(int hintsLeft){
         String instructions;
         if (hintsLeft > 0){
-            instructions = "If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
-                    "Enter coordinates on x and y and separate with space. \n" +
-                    "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
-                    "Enter first \"F\" and without any " +
-                    "further space the coordinates on x and y and (separate those with space): \n" +
+            instructions = "Want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET +
+                    "Enter coordinates  x and y, separate with space. \n" +
+                    "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
+                    "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n\n" +
                     "Hints left:"+hintsLeft+" Do you want a hint? press \"h\"\n" +
                     "If you want to give up, please type q";
         }else{
-            instructions = "If you want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET + " \n" +
-                    "Enter coordinates on x and y and separate with space. \n" +
-                    "If you want to" + TEXT_RED + " set or remove a flag" + TEXT_RESET + "\n"+
-                    "Enter first \"F\" and without any " +
-                    "further space the coordinates on x and y and (separate those with space): \n" +
-                    "If you want to give up, please type q";
+            instructions = "Want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET +
+                    "Enter coordinates  x and y, separate with space. \n" +
+                    "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
+                    "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n" +
+                    "Want to give up, please " + TEXT_RED + " type q";
         }
         return instructions;
     }
 
     public int chooseLayout() {
         System.out.println(
-                " How large do you want your board to be?\n " +
-                        "You can choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n " +
-                        "Please type "+TEXT_BOLD+TEXT_YELLOW+"6 for 6x6, 8 for 8x8 "+ TEXT_RESET+"and so on.");
+                " How large shall your board be?\n " +
+                        "Choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n " +
+                        "Type "+TEXT_BOLD+TEXT_YELLOW+"\"6\" for 6x6, \"7\" for 7x7 "+ TEXT_RESET+"and so on.");
         boolean validAnswer = true;
 
         int scale = 0;
@@ -195,8 +194,7 @@ public class Game {
     }
 
     protected int chooseDifficulty() {
-        System.out.println("GREAT CHOICE! What level of difficulty do you choose?\n" +
-                "Please press "+TEXT_YELLOW +"\"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
+        System.out.println("GREAT CHOICE! Choose your level of difficulty:" + TEXT_YELLOW +"\"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
 
         boolean validChoiceDifficulty;
         int difficulty = 0;
