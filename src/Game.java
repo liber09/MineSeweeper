@@ -64,7 +64,7 @@ public class Game {
         String[] currentInput;
         int[] coordinates = new int[2];
         Countdown Count = new Countdown();
-
+        Count.counter(counter);
         String wannaPlaceFlag;
         boolean gaveUp = false;
         int hint = 3;
@@ -73,17 +73,22 @@ public class Game {
         while (true) {
             printNumberOfMinesAndMarkedMines();
             // Inner loop, runs until the player enters correct input
+           //int timeLeft =Count.remainingTime();
+
 
             while (true) {
+                System.out.println(Count.remainingTime()+" seconds left");
                 System.out.println(getInstructions(hint));
 
-                Count.remainingTime();
+               /*
+
+                } */
                 if(Count.timesUp()){
                     timeIsUp();
                     timeUp = true;
-                    break;
 
-                }
+                    break;}
+
                 String rawInput = input.nextLine();
                 if (rawInput.equalsIgnoreCase("h") && hint > 0){
                     backendBoard.hint(playerBoard);
@@ -98,6 +103,7 @@ public class Game {
                 currentInput = rawInput.split(" ");
                 // ok den sätter första på index 1 andra på index2 så har jag två strings
                 if(currentInput.length == 1){
+                    ;
                     System.out.println("Input is needed, please try again");
                     continue;
                 }
@@ -146,7 +152,7 @@ public class Game {
                     System.out.println("Your total wins are: " + wins);
                     return;
                 }
-            }
+            }if (timeUp){ break;}
 
             if(gaveUp){
                 break;
@@ -271,6 +277,7 @@ public class Game {
     public void printNumberOfMinesAndMarkedMines(){
         System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " suspected mines.");
     }
+    int counter =30;
 
 
     static int wins = 0;

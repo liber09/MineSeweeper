@@ -8,22 +8,20 @@ public class Countdown {
 
 
 
+
     public void counter (int countdown){
         this.timer =countdown;
         Timer TimerA = new Timer();
         TimerTask TaskA = new TimerTask() {
             @Override
             public void run() {
-
                 if (timer >= 0){
 
                     timer--;
                 }
-
                 if (timer == -1){
 
-                    System.out.println("Your time is up - GAME OVER");
-
+                    System.out.println("TIME IS UP - GAME OVER");
                     TimerA.cancel();
 
 
@@ -32,13 +30,14 @@ public class Countdown {
         }    ;
         TimerA.schedule(TaskA,0,1000); // 1000 millisec -alltså en secund
 
+
     }
 
     public int remainingTime(){
         this.timer = timer;
 
+return timer;
 
-        return timer;
     }
 public boolean timesUp(){
 
