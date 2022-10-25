@@ -101,6 +101,7 @@ public class Game {
                         coordinates[0] = Integer.parseInt(currentInput[0].substring(1));
                         coordinates[1] = Integer.parseInt(currentInput[1]);
                         playerBoard.placeFlag(coordinates[0], coordinates[1]);
+                        backendBoard.printBoard();
                         playerBoard.printBoard();
 
                     } catch (NumberFormatException n) {
