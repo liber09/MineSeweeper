@@ -32,7 +32,6 @@ public class Game {
                 "                OOOOOOOOOO  )\n"+TEXT_RESET);
 
 
-
         do {
             boardSize = chooseLayout();
             difficulty = chooseDifficulty();
@@ -40,7 +39,6 @@ public class Game {
             backendBoard = new Board(boardSize, BoardType.BackendBoard);
             playerBoard = new Board(boardSize, BoardType.PlayerBoard);
             backendBoard.setUpBackendBoard(difficulty);
-            backendBoard.printBoard();
             playerBoard.printBoard();
 
             System.out.println("Get ready for round " + round + "!");
@@ -58,7 +56,7 @@ public class Game {
         Count.counter(counter);
         String wannaPlaceFlag;
         boolean gaveUp = false;
-        int hint = 3;
+        int hint = 3; //Player is given three hints each round
         boolean timeUp = false;
         // Outer loop, runs for each move the player makes
         while (true) {
@@ -77,7 +75,6 @@ public class Game {
 
                 String rawInput = input.nextLine();
                 if (rawInput.equalsIgnoreCase("h") && hint > 0){
-                    backendBoard.hint(playerBoard);
                     playerBoard.printBoard();
                     hint--;
                     continue;
@@ -90,7 +87,6 @@ public class Game {
                 currentInput = rawInput.split(" ");
                 // ok den sätter första på index 1 andra på index2 så har jag två strings
                 if(currentInput.length == 1){
-                    ;
                     System.out.println("Input is needed, please try again");
                     continue;
                 }
@@ -98,19 +94,12 @@ public class Game {
 
                 if (wannaPlaceFlag.equalsIgnoreCase("F")) {
                     try {
-                        coordinates[0] = Integer.parseInt(currentInput[0].substring(1));
-                        coordinates[1] = Integer.parseInt(currentInput[1]);
-                        playerBoard.placeFlag(coordinates[0], coordinates[1]);
-                        backendBoard.printBoard();
-                        playerBoard.printBoard();
-
+                        placeFlags(currentInput);
                     } catch (NumberFormatException n) {
                         System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
-
                     } catch (IndexOutOfBoundsException i) {
                         System.out.println("Please enter TWO numbers; row and column.");
                     }
-
                 } else {
                     try {
                         for (int i = 0; i < 2; i++) {
@@ -132,7 +121,6 @@ public class Game {
                     } catch (IndexOutOfBoundsException i) {
                         System.out.println("Please enter TWO numbers; row and column.");
                     }
-
                 }
                 if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart(), backendBoard)) {
                     System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
@@ -147,6 +135,23 @@ public class Game {
             }
         }
     }
+    //Takes user input and converts it to int array then calls placeFlags on playerBoard.
+    private void placeFlags(String[] input){
+        int[] coordinates = new int[2];
+        try{
+            coordinates[0] = Integer.parseInt(input[0].substring(1));
+            coordinates[1] = Integer.parseInt(input[1]);
+            playerBoard.placeFlag(coordinates[0], coordinates[1]);
+            backendBoard.printBoard();
+            playerBoard.printBoard();
+        } catch (NumberFormatException n) {
+            System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
+
+        } catch (IndexOutOfBoundsException i) {
+            System.out.println("Please enter TWO numbers; row and column.");
+        }
+    }
+    //Returns user instructions depending on hints left, if zero we omit the row with number of hints left.
     private String getInstructions(int hintsLeft){
         String instructions;
         if (hintsLeft > 0){
@@ -166,6 +171,7 @@ public class Game {
         return instructions;
     }
 
+    //What layout does the player want. Can be 6x6 up to 40x40.
     public int chooseLayout() {
         System.out.println(
                 " How large shall your board be?\n " +
@@ -194,6 +200,7 @@ public class Game {
         return scale; // boardSize
     }
 
+    //How hard should the game be. Easy=10% bombs, Medium=15% bombs, Hard=20% bombs
     protected int chooseDifficulty() {
         System.out.println("GREAT CHOICE! Choose your level of difficulty:" + TEXT_YELLOW +"\"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
 
@@ -226,16 +233,15 @@ public class Game {
         return difficulty;
     }
 
+    //Checks if the player wants to play the game again
     public boolean playAgain() {
 
 
-        while(true){
-            System.out.println("Wanna play again? Type "+TEXT_YELLOW+"\"c\" for continue,"+TEXT_RED+" type \"q\" to quit"+TEXT_RESET);
+        while (true) {
+            System.out.println("Wanna play again? Type " + TEXT_YELLOW + "\"c\" for continue," + TEXT_RED + " type \"q\" to quit" + TEXT_RESET);
             String playAgain = sc.nextLine();
 
             if (playAgain.equalsIgnoreCase("c")) {
-                // playerBoard.resetBoard();
-                // backendBoard.resetBoard(); behövs inte
                 return true;
 
             } else if (playAgain.equalsIgnoreCase("q")) {
@@ -244,11 +250,11 @@ public class Game {
                 return false;
             } else {
                 System.out.println("Not a valid answer");
-
             }
+        }
+    }
 
-        }}
-
+    //The game is over, player hit a bomb and loose, inform player.
     public void gameOver(int x, int y){
         System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
         backendBoard.printBoard();
