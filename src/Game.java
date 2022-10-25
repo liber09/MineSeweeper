@@ -1,6 +1,4 @@
 
-import java.util.IllegalFormatCodePointException;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -63,17 +61,29 @@ public class Game {
         Scanner input = new Scanner(System.in);
         String[] currentInput;
         int[] coordinates = new int[2];
-
+        Countdown Count = new Countdown();
+        Count.counter(counter);
         String wannaPlaceFlag;
         boolean gaveUp = false;
         int hint = 3;
+        boolean timeUp = false;
         // Outer loop, runs for each move the player makes
         while (true) {
             printNumberOfMinesAndMarkedMines();
             // Inner loop, runs until the player enters correct input
+           //int timeLeft =Count.remainingTime();
+
 
             while (true) {
+                if(Count.timesLeft()){
+                System.out.println(Count.remainingTime()+" seconds left");} else {
+                    timeIsUp();
+                    return;
+
+                }
                 System.out.println(getInstructions(hint));
+
+
 
                 String rawInput = input.nextLine();
                 if (rawInput.equalsIgnoreCase("h") && hint > 0){
@@ -90,6 +100,7 @@ public class Game {
                 currentInput = rawInput.split(" ");
                 // ok den sätter första på index 1 andra på index2 så har jag två strings
                 if(currentInput.length == 1){
+                    ;
                     System.out.println("Input is needed, please try again");
                     continue;
                 }
@@ -252,10 +263,15 @@ public class Game {
         System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" X= "+x+" and Y= "+y+" was a mine\n GAME OVER!");
         backendBoard.printBoard();
     }
+    public void timeIsUp(){
+        System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" your time was up - GAME OVER");
+        backendBoard.printBoard();
+    }
     //Prints number of mines and number of marked mines to the user
     public void printNumberOfMinesAndMarkedMines(){
         System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " suspected mines.");
     }
+    int counter =30;
 
 
     static int wins = 0;
