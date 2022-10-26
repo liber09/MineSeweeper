@@ -28,6 +28,19 @@ public class Board {
     public int getTotalNumberOfBombs(){
         return this.totalNumberOfBombs;
     }
+
+    //loop through the board if an unknown is found return true, otherwise false
+    private boolean areThereUnknownSquaresLeft(){
+        for (int i=0;i<boardSize;i++){
+            for (int j=0;j<boardSize;j++){
+                if (board[i][j].equals(UNKNOWN)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //Count how many flags the player has placed on the board and return number
     public int countFlags(){
         int flagCounter = 0;
@@ -103,7 +116,6 @@ public class Board {
         }
     }
 
-
     /*
     Takes two ints, representing index for row and column in the board
     Counts the bombs on the (up to) eight squares surrounding the chosen square.
@@ -135,7 +147,6 @@ public class Board {
         return numberOfBombs;
     }
 
-
     //Place bombs
     public void placeBombs() {
         Random ran = new Random();
@@ -150,7 +161,6 @@ public class Board {
             }
         }
     }
-
 
     /*
     Used in backendBoard to reveal empty squares and add them to playerBoard. It also adds the border numbers.
@@ -213,26 +223,30 @@ public class Board {
         return hasPlayerWon;
     }
 
-
-
-
-
+    /*
+        Player wants help to open a square, check if there is unknown left and if so, random coordinates and check if bomb and that it is unknown.
+        if so call revealSquares.
+     */
 
     public void hint(Board PlayerBoard ){
+        boolean unknownLeft = areThereUnknownSquaresLeft();
+        //If we don't have any unknown squares leave method.
+        if (unknownLeft){
+            System.out.println("There are no unknown squares left but you have more flags than there is bombs. Unflag first and try again.");
+            return;
+        }
         Random ran = new Random();
-
         int row = ran.nextInt(boardSize);
         int column = ran.nextInt(boardSize);
-
-
         if (checkIfBomb(row, column)|| !PlayerBoard.checkSquare(row,column).equals(UNKNOWN))
         {
             hint(PlayerBoard);
-
+        } else {
+            revealSquares(row,column, PlayerBoard);
         }
+    }
 
-        else {
-            revealSquares(row,column, PlayerBoard);}} // does not work properly when all mines are flagged but one is a false flag
+    // does not work properly when all mines are flagged but one is a false flag
     //it casts an error
 
 
