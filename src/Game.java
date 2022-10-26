@@ -78,7 +78,7 @@ public class Game {
                     backendBoard.hint(playerBoard);
                     playerBoard.printBoard();
                     hint--;
-                    if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart(), backendBoard)) {
+                    if(playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
                         System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
                         wins++;
                         System.out.println("Your total wins are: " + wins);
@@ -112,13 +112,13 @@ public class Game {
                         for (int i = 0; i < 2; i++) {
                             coordinates[i] = Integer.parseInt(currentInput[i]);
                         }
-                        backendBoard.revealEmptySquares(coordinates[0], coordinates[1], playerBoard);
+                        backendBoard.revealSquares(coordinates[0], coordinates[1], playerBoard);
                         playerBoard.printBoard();
                         if (playerBoard.isSquareFlag(coordinates[0], coordinates[1])){
                             System.out.println("There is a flag already on this position, please try another or remove flag first.");
                             break;
                         }else{
-                            if (backendBoard.checkIfMine(coordinates[0], coordinates[1])) {
+                            if (backendBoard.checkIfBomb(coordinates[0], coordinates[1])) {
                                 gameOver(coordinates[0], coordinates[1]);
                                 return;
                             }
@@ -129,7 +129,7 @@ public class Game {
                         System.out.println("Please enter TWO numbers; row and column.");
                     }
                 }
-                if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart(), backendBoard)) {
+                if(playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
                     System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
                     wins++;
                     System.out.println("Your total wins are: " + wins);
@@ -272,7 +272,7 @@ public class Game {
     }
     //Prints number of mines and number of marked mines to the user
     public void printNumberOfMinesAndMarkedMines(){
-        System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " suspected mines.");
+        System.out.println("Number of mines to find "+ backendBoard.getTotalNumberOfBombs() + ". You have now marked "+playerBoard.countFlags()+ " suspected mines.");
     }
     int counter =240;
     static int wins = 0;
