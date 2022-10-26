@@ -57,7 +57,7 @@ public class Game {
         String wannaPlaceFlag;
         boolean gaveUp = false;
         int hint = 3; //Player is given three hints each round
-        boolean timeUp = false;
+
         // Outer loop, runs for each move the player makes
         while (true) {
             printNumberOfMinesAndMarkedMines();
@@ -78,13 +78,19 @@ public class Game {
                     backendBoard.hint(playerBoard);
                     playerBoard.printBoard();
                     hint--;
+                    if(playerBoard.checkWin(backendBoard.getTotalMinesFromStart(), backendBoard)) {
+                        System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
+                        wins++;
+                        System.out.println("Your total wins are: " + wins);
+                        return;
+                    }
                     continue;
                 }
-                if(rawInput.equals("q")){
+               if(rawInput.equals("q")){
                     System.out.println("Sad you gave up so easy!");
                     gaveUp = true;
-                    break;
-                }
+                    break;       }
+
                 currentInput = rawInput.split(" ");
                 // ok den sätter första på index 1 andra på index2 så har jag två strings
                 if(currentInput.length == 1){
@@ -268,6 +274,6 @@ public class Game {
     public void printNumberOfMinesAndMarkedMines(){
         System.out.println("Number of mines to find "+ backendBoard.getTotalMinesFromStart() + ". You have now marked "+playerBoard.countNumberOfMarkedBombs()+ " suspected mines.");
     }
-    int counter =30;
+    int counter =240;
     static int wins = 0;
 }
