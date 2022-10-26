@@ -189,34 +189,30 @@ public class Board {
     public boolean checkWin(int totalMineCount, Board backendBoard) {
         int unKnownCounter = 0;
         int flagCounter = 0;
+        int falseFlag =0;
         boolean hasPlayerWon = false;
-        boolean hasFlaggedFalseSquare = false;
-        for (int row = 0; row < boardSize; row++) {
-            for (int column = 0; column < boardSize; column++) {
-                if (board[row][column].equals(UNKNOWN)) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (board[i][j].equals(UNKNOWN)) {
                     unKnownCounter++;
                 }
-                if (board[row][column].equals(FLAG) && backendBoard.board[row][column].equals(BOMB)){
+                if (board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(BOMB)){
                     flagCounter++;
-                } else if(board[row][column].equals(FLAG) && backendBoard.board[row][column].equals(EMPTY)) {
-                    hasFlaggedFalseSquare = true;
-                    return false;
-
                 }
-
-        } return hasFlaggedFalseSquare;}//Winning by marking all the right bombs!
-
-
-
-        if (!hasFlaggedFalseSquare &&((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount)) {
-
-            System.out.println("All Bombs found!!");
+                if (board[i][j].equals(FLAG) && !backendBoard.board[i][j].equals(BOMB)){
+                    falseFlag++;
+                }
+            }
+        }
+        if ((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount && falseFlag==0) {
 
             hasPlayerWon = true;
 
         }
+
         return hasPlayerWon;
     }
+
 
 
 
