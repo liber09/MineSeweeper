@@ -270,6 +270,7 @@ public class Board {
         int unKnownCounter = 0;
         int flagCounter = 0;
         boolean hasPlayerWon = false;
+        boolean hasFlaggedFalseSquare = false;
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 if (board[i][j].equals(UNKNOWN)) {
@@ -277,12 +278,17 @@ public class Board {
                 }
                 if (board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(MINE)){
                     flagCounter++;
-                } else if(board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(EMPTY)){
+                } else if(board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(EMPTY)) {
+                    hasFlaggedFalseSquare = true;
                     return false;
+
                 }
-            }
-        } //Winning by marking all the right bombs!
-        if ((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount) {
+
+        } return hasFlaggedFalseSquare;}//Winning by marking all the right bombs!
+
+
+
+        if (!hasFlaggedFalseSquare &&((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount)) {
 
             System.out.println("All Bombs found!!");
 
@@ -292,6 +298,10 @@ public class Board {
         return hasPlayerWon;
     }
 
+
+
+
+
     public void hint(Board PlayerBoard ){
         Random ran = new Random();
 
@@ -300,15 +310,13 @@ public class Board {
 
 
         if (checkIfMine(x, y)|| !PlayerBoard.checkSquare(x,y).equals(UNKNOWN))
-              {
+        {
             hint(PlayerBoard);
 
-        } else if(!checkIfMine(x,y)&& PlayerBoard.checkSquare(x,y).equals(FLAG)){
-            System.out.println("Remove flag at"+x+" "+y);
         }
 
-        else {revealEmptySquares(x,y, PlayerBoard);}}
-
+        else {revealEmptySquares(x,y, PlayerBoard);}} // does not work properly when all mines are flagged but one is a false flag
+    //it casts an error
 
     //Call createNewBoard to reset the gameBoard, use boardType to get correct initial layout.
      // public void resetBoard() {
