@@ -240,6 +240,11 @@ public class Board {
         if(row < 0 || row > boardSize - 1 || column < 0 || column > boardSize - 1) {
             return;
         }
+        // if all squares are checked but the bombs
+        //if(totalMinesFromStart+1==playerBoard.UNKNOWN.length()){
+          //  System.out.println("HINT: There are only "+totalMinesFromStart+" bombs on the field");
+
+       // }
         // Here we check if the square is empty and not already checked.
         if(board[row][column] == EMPTY && playerBoard.board[row][column] == UNKNOWN) {
             // If so, we update the square in playerBoard...
@@ -272,15 +277,18 @@ public class Board {
                 }
                 if (board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(MINE)){
                     flagCounter++;
+                } else if(board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(EMPTY)){
+                    return false;
                 }
             }
-        } //KANSKE en method som ge vinst när man har flaggat för alla
+        } //Winning by marking all the right bombs!
         if ((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount) {
+
+            System.out.println("All Bombs found!!");
 
             hasPlayerWon = true;
 
         }
-        System.out.println(flagCounter);
         return hasPlayerWon;
     }
 
@@ -295,13 +303,11 @@ public class Board {
               {
             hint(PlayerBoard);
 
+        } else if(!checkIfMine(x,y)&& PlayerBoard.checkSquare(x,y).equals(FLAG)){
+            System.out.println("Remove flag at"+x+" "+y);
         }
 
         else {revealEmptySquares(x,y, PlayerBoard);}}
-
-
-
-
 
 
     //Call createNewBoard to reset the gameBoard, use boardType to get correct initial layout.

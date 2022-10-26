@@ -5,10 +5,6 @@ public class Countdown {
 
     int timer;
 
-
-
-
-
     public void counter (int countdown){
         this.timer =countdown;
         Timer TimerA = new Timer();
