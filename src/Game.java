@@ -11,7 +11,10 @@ public class Game {
     public static final String TEXT_WHITE = "\u001B[37m";
     public static final String TEXT_BOLD ="\033[0;1m";
 
+    int counter;
+    static int wins = 0;
     private int noOfHintsLeft;
+
     public void startGame(){
         int boardSize;
         int difficulty;
@@ -160,7 +163,6 @@ public class Game {
         String latestMove;
 
 
-        // Outer loop, runs for each move the player makes
         while (true) {
 
             // Let the player make a move, and get a string to indicate which one.
@@ -175,14 +177,13 @@ public class Game {
                     return;
                 }
                 // if the player used a hint
-                case "h" -> System.out.println("You used a hint to check a safe square");
-                // if the player checked a safe square or set/removed a flag
-                case "f", "all good" -> {}
+                case "h" -> System.out.println("You used a hint to check a safe square.");
+                // if the player didn't touch a bomb
+                case "f", "all good", "no hints left" -> {}
                 // if the player ran out of time, we return
                 case "t" -> {return;}
-                // default is gameOver! Harsh.
+                // default is gameOver! (The player found a bomb.) The coordinates are returned and passed on to gameOver.
                 default -> {
-                    System.out.println(latestMove);
                     String[] stringCoordinates;
                     stringCoordinates = latestMove.split(" ");
                     int row = Integer.parseInt(stringCoordinates[0]);
@@ -191,8 +192,10 @@ public class Game {
                     return;
                 }
             }
+            // After the player input, we print the board and info to the screen...
             playerBoard.printBoard();
             printNumberOfBombsAndMarkedBombs();
+            // ...and check if the player won
             if(playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
                 System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
                 wins++;
@@ -219,20 +222,26 @@ public class Game {
 
             String rawInput = sc.nextLine();
 
-            // Trying to change to switch statement
             switch (rawInput) {
                 case "h" -> {
-                    //if (noOfHintsLeft > 0 && playerBoard.countUnknownSquares() > 0) { // Hmm... what if there is no unknown squares left, but one or more false flags?
-                      backendBoard.hint(playerBoard);
-                        noOfHintsLeft--;
-                        return "h";
-                   // }
+                    if (noOfHintsLeft > 0 ) {
+                      if(backendBoard.newHint(playerBoard)) {
+                          noOfHintsLeft--;
+                          return "h";
+                      } else {
+                          System.out.println("One or more of the flags on the board are false. But which one/s?");
+                          return "all good";
+                      }
+                   } else {
+                        System.out.println("You have no hints left!");
+                        return "no hints left";
+                    }
                 }
                 case "q" -> {
                     return "q";
                 }
                 default -> {
-                    currentInput = rawInput.strip().split(" "); //should fix space first bug
+                    currentInput = rawInput.strip().split(" ");
                     try {
                         if (currentInput[0].substring(0, 1).equalsIgnoreCase("F")) {
                             playerBoard.placeFlag(Integer.parseInt(currentInput[0].substring(1)),
@@ -240,6 +249,7 @@ public class Game {
                             return "f";
                         } else if(playerBoard.isSquareFlag(Integer.parseInt(currentInput[0]), Integer.parseInt(currentInput[1]))) {
                             System.out.println("There is a flag already on this position, please try another or remove flag first.");
+                            return "all good";
                         } else {
                             backendBoard.revealSquares(Integer.parseInt(currentInput[0]),
                                     Integer.parseInt(currentInput[1]), playerBoard);
@@ -395,8 +405,6 @@ public class Game {
     public void printNumberOfBombsAndMarkedBombs(){
         System.out.println("Number of bombs to find "+ backendBoard.getTotalNumberOfBombs() + ". You have now marked "+playerBoard.countFlags()+ " suspected bombs.");
     }
-    int counter =240;
-    static int wins = 0;
 
 
 }
