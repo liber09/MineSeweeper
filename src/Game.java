@@ -91,9 +91,7 @@ public class Game {
                     System.out.println("Sad you gave up so easy!");
                     gaveUp = true;
                     break;       }
-                if (rawInput.charAt(0) == ' ') {
-                    System.out.println("Please put first tho coordinate for X then space then Y");
-                    continue;}
+
 
 
                     currentInput = rawInput.split(" ");
@@ -102,6 +100,9 @@ public class Game {
                     System.out.println("Input is needed, please try again");
                     continue;
                 }
+                if (rawInput.charAt(0) == ' ') {
+                    System.out.println("Please put first tho coordinate for X then space then Y");
+                    continue;}
                 wannaPlaceFlag = currentInput[0].substring(0, 1);
 
                 if (wannaPlaceFlag.equalsIgnoreCase("F")) {
