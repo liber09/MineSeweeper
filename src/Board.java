@@ -243,7 +243,7 @@ public class Board {
     public void hint(Board PlayerBoard ){
         boolean unknownLeft = areThereUnknownSquaresLeft();
         //If we don't have any unknown squares leave method.
-        if (!unknownLeft){
+        if (unknownLeft){
             System.out.println("There are no unknown squares left but you have more flags than there is bombs. Unflag first and try again.");
             return;
         }

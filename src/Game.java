@@ -31,7 +31,7 @@ public class Game {
                 "             OOOOT O"+TEXT_L_BLUE+" INSANE"+TEXT_BLUE+" OO \\\n" +
                 "            OOOL  OOO"+TEXT_L_BLUE+" BOMB"+TEXT_BLUE+" OOOO )\n" +
                 "            OOOL  OOO"+TEXT_L_BLUE+" PANIC "+TEXT_BLUE+"0OO )\n" +
-                "              OOOJ OOO"+TEXT_L_BLUE+" 2 "+TEXT_BLUE+"OOOOO )\n" +
+                "              OOOJ OOOO"+TEXT_L_BLUE+" 2 "+TEXT_BLUE+"OOOO )\n" +
                 "                OOOOOOOOOOO  )\n"+TEXT_RESET);
 
 
@@ -222,11 +222,11 @@ public class Game {
             // Trying to change to switch statement
             switch (rawInput) {
                 case "h" -> {
-                    if (noOfHintsLeft > 0 && playerBoard.countUnknownSquares() > 0) { // Hmm... what if there is no unknown squares left, but one or more false flags?
-                        backendBoard.hint(playerBoard);
+                    //if (noOfHintsLeft > 0 && playerBoard.countUnknownSquares() > 0) { // Hmm... what if there is no unknown squares left, but one or more false flags?
+                      backendBoard.hint(playerBoard);
                         noOfHintsLeft--;
                         return "h";
-                    }
+                   // }
                 }
                 case "q" -> {
                     return "q";
@@ -297,8 +297,8 @@ public class Game {
     //What layout does the player want. Can be 6x6 up to 40x40.
     public int chooseLayout() {
         System.out.println(
-                " How large shall your board be?" +
-                        "Choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n " +
+                "How large shall your board be?" +
+                        "Choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n" +
                         "Type "+TEXT_BOLD+TEXT_YELLOW+"\"6\" for 6x6, \"7\" for 7x7 "+ TEXT_RESET+"and so on.");
         boolean validAnswer = true;
 
