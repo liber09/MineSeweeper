@@ -10,6 +10,8 @@ public class Game {
     public static final String TEXT_YELLOW = "\u001B[33m";
     public static final String TEXT_WHITE = "\u001B[37m";
     public static final String TEXT_BOLD ="\033[0;1m";
+
+    private int noOfHintsLeft;
     public void startGame(){
         int boardSize;
         int difficulty;
@@ -41,9 +43,11 @@ public class Game {
             playerBoard = new Board(boardSize, BoardType.PlayerBoard);
             backendBoard.setUpBackendBoard(difficulty);
             playerBoard.printBoard();
+            noOfHintsLeft = 3;
 
             System.out.println("Get ready for round " + round + "!");
-            gameLoop();
+            //gameLoop();
+            newGameLoop();
 
             round++;
         }
@@ -145,6 +149,112 @@ public class Game {
 
             if(gaveUp){
                 break;
+            }
+        }
+    }
+
+    private void newGameLoop() {
+
+        Countdown count = new Countdown();
+        count.counter(counter);
+        String latestMove;
+
+
+        // Outer loop, runs for each move the player makes
+        while (true) {
+
+            // Let the player make a move, and get a string to indicate which one.
+            latestMove = userInput(count);
+
+            // Here we check what kind of move the player made.
+            switch(latestMove) {
+                // if the player quit
+                case "q" -> {
+                    backendBoard.printBoard();
+                    System.out.println("Sad you gave up so easy!");
+                    return;
+                }
+                // if the player used a hint
+                case "h" -> System.out.println("You used a hint to check a safe square");
+                // if the player checked a safe square or set/removed a flag
+                case "f", "all good" -> {}
+                // if the player ran out of time, we return
+                case "t" -> {return;}
+                // default is gameOver! Harsh.
+                default -> {
+                    System.out.println(latestMove);
+                    String[] stringCoordinates;
+                    stringCoordinates = latestMove.split(" ");
+                    int row = Integer.parseInt(stringCoordinates[0]);
+                    int column = Integer.parseInt(stringCoordinates[1]);
+                    gameOver(row, column);
+                    return;
+                }
+            }
+            playerBoard.printBoard();
+            printNumberOfBombsAndMarkedBombs();
+            if(playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
+                System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
+                wins++;
+                System.out.println("Your total wins are: " + wins);
+                return;
+            }
+        }
+    }
+
+
+    public String userInput(Countdown count) {
+
+        String[] currentInput;
+
+        while(true) {
+            if (count.timesLeft()) {
+                System.out.println(count.remainingTime() + " seconds left");
+            } else {
+                timeIsUp();
+                return "t";
+            }
+
+            System.out.println(getInstructions(noOfHintsLeft));
+
+            String rawInput = sc.nextLine();
+
+            // Trying to change to switch statement
+            switch (rawInput) {
+                case "h" -> {
+                    if (noOfHintsLeft > 0 && playerBoard.countUnknownSquares() > 0) { // Hmm... what if there is no unknown squares left, but one or more false flags?
+                        backendBoard.hint(playerBoard);
+                        noOfHintsLeft--;
+                        return "h";
+                    }
+                }
+                case "q" -> {
+                    return "q";
+                }
+                default -> {
+                    currentInput = rawInput.strip().split(" "); //should fix space first bug
+                    try {
+                        if (currentInput[0].substring(0, 1).equalsIgnoreCase("F")) {
+                            playerBoard.placeFlag(Integer.parseInt(currentInput[0].substring(1)),
+                                    Integer.parseInt(currentInput[1]));
+                            return "f";
+                        } else if(playerBoard.isSquareFlag(Integer.parseInt(currentInput[0]), Integer.parseInt(currentInput[1]))) {
+                            System.out.println("There is a flag already on this position, please try another or remove flag first.");
+                        } else {
+                            backendBoard.revealSquares(Integer.parseInt(currentInput[0]),
+                                    Integer.parseInt(currentInput[1]), playerBoard);
+                            if(backendBoard.checkIfBomb(Integer.parseInt(currentInput[0]), Integer.parseInt(currentInput[1]))) {
+                                return currentInput[0] + " " + currentInput[1];
+                            } else {
+                                return "all good";
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        playerBoard.printBoard();
+                    }
+
+                }
             }
         }
     }

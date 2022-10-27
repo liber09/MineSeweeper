@@ -54,6 +54,18 @@ public class Board {
         return flagCounter;
     }
 
+    public int countUnknownSquares() {
+        int unknownSquares = 0;
+        for(int row = 0;row<boardSize;row++){
+            for(int column = 0;column<boardSize;column++){
+                if(board[row][column].equals(UNKNOWN)){
+                    unknownSquares++;
+                }
+            }
+        }
+        return unknownSquares;
+    }
+
     //Takes row and y coordinates and returns the value of that square
     public String checkSquare(int row, int column){
         return board[row][column];
