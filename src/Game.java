@@ -209,6 +209,11 @@ public class Game {
             }
         } while (!validAnswer);
 
+
+            counter = scale * scale * 3;
+
+
+
         return scale; // boardSize
     }
 
@@ -281,4 +286,6 @@ public class Game {
     }
     int counter =240;
     static int wins = 0;
+
+
 }
