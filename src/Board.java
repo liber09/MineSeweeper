@@ -214,7 +214,7 @@ public class Board {
                 }
             }
         }
-        if ((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount && falseFlag==0) {
+        if (((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount) && falseFlag==0) {
 
             hasPlayerWon = true;
 
