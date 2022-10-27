@@ -109,7 +109,7 @@ public class Board {
         for (int row = 0; row < boardSize; row++) {
             for (int column = 0; column < boardSize; column++) {
                 int surroundingMines = countBombs(row, column);
-                if (surroundingMines != 0 && board[row][column] == EMPTY) {
+                if (surroundingMines != 0 && board[row][column].equals(EMPTY)) {
                     board[row][column] = String.valueOf(surroundingMines);
                 }
             }
@@ -133,7 +133,7 @@ public class Board {
                 try {
                     // We don't check the middle square!
                     if (!(y == row && x == column)) {
-                        if (board[y][x] == BOMB) {
+                        if (board[y][x].equals(BOMB)) {
                             numberOfBombs++;
                         }
                     }
@@ -176,7 +176,7 @@ public class Board {
 
        // }
         // Here we check if the square is empty and not already checked.
-        if(board[row][column] == EMPTY && playerBoard.board[row][column] == UNKNOWN) {
+        if(board[row][column].equals(EMPTY) && playerBoard.board[row][column].equals(UNKNOWN)) {
             // If so, we update the square in playerBoard...
             playerBoard.board[row][column] = EMPTY;
             // ...and check the surrounding squares by four recursive calls!
@@ -185,7 +185,7 @@ public class Board {
             revealSquares(row, column - 1, playerBoard);
             revealSquares(row, column + 1, playerBoard);
         // If the square isn't EMPTY, but unchecked, we just uncover it
-        } else if(playerBoard.board[row][column] == UNKNOWN) {
+        } else if(playerBoard.board[row][column].equals(UNKNOWN)) {
             playerBoard.board[row][column] = board[row][column];
         }
     }
@@ -231,7 +231,7 @@ public class Board {
     public void hint(Board PlayerBoard ){
         boolean unknownLeft = areThereUnknownSquaresLeft();
         //If we don't have any unknown squares leave method.
-        if (unknownLeft){
+        if (!unknownLeft){
             System.out.println("There are no unknown squares left but you have more flags than there is bombs. Unflag first and try again.");
             return;
         }
