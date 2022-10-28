@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 public class Board {
     protected int boardSize; //The size of the board.
@@ -54,17 +55,6 @@ public class Board {
         return flagCounter;
     }
 
-    public int countUnknownSquares() {
-        int unknownSquares = 0;
-        for(int row = 0;row<boardSize;row++){
-            for(int column = 0;column<boardSize;column++){
-                if(board[row][column].equals(UNKNOWN)){
-                    unknownSquares++;
-                }
-            }
-        }
-        return unknownSquares;
-    }
 
     //Takes row and y coordinates and returns the value of that square
     public String checkSquare(int row, int column){
@@ -255,6 +245,28 @@ public class Board {
             hint(PlayerBoard);
         } else {
             revealSquares(row,column, PlayerBoard);
+        }
+    }
+
+    public boolean newHint(Board playerBoard) {
+
+        ArrayList<int[]> validSquares = new ArrayList<>();
+        Random ran = new Random();
+
+        for(int row = 0;row < boardSize; row++){
+            for(int column = 0; column < boardSize; column++){
+                if(!checkIfBomb(row, column) &&
+                        (playerBoard.board[row][column].equals(UNKNOWN))) {
+                    validSquares.add(new int[]{row, column});
+                }
+            }
+        }
+        if(validSquares.size() > 0) {
+            int[] randomSquare = validSquares.get(ran.nextInt(validSquares.size()));
+            revealSquares(randomSquare[0], randomSquare[1], playerBoard);
+            return true;
+        } else {
+            return false;
         }
     }
 
