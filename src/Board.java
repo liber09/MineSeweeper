@@ -1,13 +1,14 @@
 import java.util.ArrayList;
 import java.util.Random;
+
 public class Board {
     protected int boardSize; //The size of the board.
     private String[][] board; //Contains the board.
     private int totalNumberOfBombs;
     private BoardType type;
-    protected final String UNKNOWN = TEXT_GREEN+"\u25af"+TEXT_RESET; //Hidden square
-    private final String BOMB = TEXT_RED+"\u2638"+TEXT_RESET; //Mine square
-    private final String FLAG = TEXT_LIGHT_RED +"\u2691"+TEXT_RESET; //User suspects mine square
+    protected final String UNKNOWN = TEXT_GREEN + "\u25af" + TEXT_RESET; //Hidden square
+    private final String BOMB = TEXT_RED + "\u2638" + TEXT_RESET; //Mine square
+    private final String FLAG = TEXT_LIGHT_RED + "\u2691" + TEXT_RESET; //User suspects mine square
     protected final String EMPTY = " "; //Empty square
     public static final String TEXT_RED = "\u001B[31m";
     public static final String TEXT_LIGHT_RED = "\u001B[91m";
@@ -26,28 +27,25 @@ public class Board {
     }
 
     //return the number of bombs on the board.
-    public int getTotalNumberOfBombs(){
+    public int getTotalNumberOfBombs() {
         return this.totalNumberOfBombs;
     }
 
-    //loop through the board if an unknown is found return true, otherwise false
-    private boolean areThereUnknownSquaresLeft(){
-        for (int i=0;i<boardSize;i++){
-            for (int j=0;j<boardSize;j++){
-                if (board[i][j].equals(UNKNOWN)){
-                    return true;
-                }
-            }
+    //Place a flag if square is unknown or remove flag if there is a flag on the position. Place on playerBoard.
+    public void placeFlag(int row, int column) {
+        if (board[row][column].equals(UNKNOWN)) {
+            board[row][column] = FLAG;
+        } else if (board[row][column].equals(FLAG)) {
+            board[row][column] = UNKNOWN;
         }
-        return false;
     }
 
     //Count how many flags the player has placed on the board and return number
-    public int countFlags(){
+    public int countFlags() {
         int flagCounter = 0;
-        for(int row = 0;row<boardSize;row++){
-            for(int column = 0;column<boardSize;column++){
-                if(board[row][column].equals(FLAG)){
+        for (int row = 0; row < boardSize; row++) {
+            for (int column = 0; column < boardSize; column++) {
+                if (board[row][column].equals(FLAG)) {
                     flagCounter++;
                 }
             }
@@ -55,67 +53,19 @@ public class Board {
         return flagCounter;
     }
 
+    //Checks a square to see if it contains a flag, if so return true, otherwise return false.
+    public Boolean isSquareFlag(int row, int column) {
+        return checkSquare(row, column).equals(FLAG);
+    }
 
-    //Takes row and y coordinates and returns the value of that square
-    public String checkSquare(int row, int column){
+    //Takes row (x) and column(y) coordinates and returns the value of that square
+    public String checkSquare(int row, int column) {
         return board[row][column];
     }
 
-
-    //Checks a square to see if it contains a flag, if so return true, otherwise return false.
-    public Boolean isSquareFlag(int row, int column){
-        return checkSquare(row,column).equals(FLAG);
-    }
-
-
+    //Checks the square if it is a bomb, if so, return true. Otherwise false
     public boolean checkIfBomb(int row, int column) {
-        return checkSquare(row,column).equals(BOMB);
-    }
-
-
-    //Place a flag if square is unknown or remove flag if there is a flag on the position. Place on playerBoard.
-    public void placeFlag(int row, int column){
-        if(board[row][column].equals(UNKNOWN)){
-            board[row][column] = FLAG;
-        }
-        else if(board[row][column].equals(FLAG)){
-            board[row][column] = UNKNOWN;
-        }
-
-    }
-    public void createBoard(BoardType type) {
-        board = new String[boardSize][boardSize];
-        for (int row = 0; row < boardSize; row++) {
-            for (int column = 0; column < boardSize; column++) {
-                if (type == BoardType.PlayerBoard) {
-                    board[row][column] = UNKNOWN;
-                }
-                if (type == BoardType.BackendBoard) {
-                    board[row][column] = EMPTY;
-                }
-
-            }
-        }
-    }
-
-
-    /*
-    Takes an int, difficulty, that the user provides.
-    Sets up backendBoard with mines and numbers, using placeBombs and countBombs
-     */
-    public void setUpBackendBoard(int difficulty) {
-        int totalSquares = boardSize * boardSize;
-        totalNumberOfBombs = totalSquares * difficulty / 100;
-        placeBombs();
-
-        for (int row = 0; row < boardSize; row++) {
-            for (int column = 0; column < boardSize; column++) {
-                int surroundingMines = countBombs(row, column);
-                if (surroundingMines != 0 && board[row][column].equals(EMPTY)) {
-                    board[row][column] = String.valueOf(surroundingMines);
-                }
-            }
-        }
+        return checkSquare(row, column).equals(BOMB);
     }
 
     /*
@@ -156,10 +106,44 @@ public class Board {
         for (int i = 0; i < totalNumberOfBombs; i++) {
             int row = ran.nextInt(boardSize);
             int column = ran.nextInt(boardSize);
-            if (!checkIfBomb(row,column)){ // Changed from validBombPlacement to !checkIfBomb - removed validBombPlacement.
+            if (!checkIfBomb(row, column)) { // Changed from validBombPlacement to !checkIfBomb - removed validBombPlacement.
                 board[row][column] = BOMB;
-            }else{
+            } else {
                 i--;
+            }
+        }
+    }
+
+    //create the board, type parameter tells which kind of board that should be created
+    public void createBoard(BoardType type) {
+        board = new String[boardSize][boardSize];
+        for (int row = 0; row < boardSize; row++) {
+            for (int column = 0; column < boardSize; column++) {
+                if (type == BoardType.PlayerBoard) {
+                    board[row][column] = UNKNOWN;
+                }
+                if (type == BoardType.BackendBoard) {
+                    board[row][column] = EMPTY;
+                }
+            }
+        }
+    }
+
+    /*
+    Takes an int, difficulty, that the user provides.
+    Sets up backendBoard with mines and numbers, using placeBombs and countBombs
+     */
+    public void setUpBackendBoard(int difficulty) {
+        int totalSquares = boardSize * boardSize;
+        totalNumberOfBombs = totalSquares * difficulty / 100;
+        placeBombs();
+
+        for (int row = 0; row < boardSize; row++) {
+            for (int column = 0; column < boardSize; column++) {
+                int surroundingMines = countBombs(row, column);
+                if (surroundingMines != 0 && board[row][column].equals(EMPTY)) {
+                    board[row][column] = String.valueOf(surroundingMines);
+                }
             }
         }
     }
@@ -169,16 +153,16 @@ public class Board {
      */
     public void revealSquares(int row, int column, Board playerBoard) {
         // first, we check the bounderies
-        if(row < 0 || row > boardSize - 1 || column < 0 || column > boardSize - 1) {
+        if (row < 0 || row > boardSize - 1 || column < 0 || column > boardSize - 1) {
             return;
         }
         // if all squares are checked but the bombs
         //if(totalMinesFromStart+1==playerBoard.UNKNOWN.length()){
-          //  System.out.println("HINT: There are only "+totalMinesFromStart+" bombs on the field");
+        //  System.out.println("HINT: There are only "+totalMinesFromStart+" bombs on the field");
 
-       // }
+        // }
         // Here we check if the square is empty and not already checked.
-        if(board[row][column].equals(EMPTY) && playerBoard.board[row][column].equals(UNKNOWN)) {
+        if (board[row][column].equals(EMPTY) && playerBoard.board[row][column].equals(UNKNOWN)) {
             // If so, we update the square in playerBoard...
             playerBoard.board[row][column] = EMPTY;
             // ...and check the surrounding squares by four recursive calls!
@@ -186,8 +170,8 @@ public class Board {
             revealSquares(row + 1, column, playerBoard);
             revealSquares(row, column - 1, playerBoard);
             revealSquares(row, column + 1, playerBoard);
-        // If the square isn't EMPTY, but unchecked, we just uncover it
-        } else if(playerBoard.board[row][column].equals(UNKNOWN)) {
+            // If the square isn't EMPTY, but unchecked, we just uncover it
+        } else if (playerBoard.board[row][column].equals(UNKNOWN)) {
             playerBoard.board[row][column] = board[row][column];
         }
     }
@@ -197,31 +181,30 @@ public class Board {
         and count all UNKNOWN squares.
         If they are more than the totalMinesFromStart
         the player has not won. If they are equal, the player has cleared all unknown squares without mines and won the game.
+        Second Win Option is if player has correctly flagged all the bombs and no false flags.
      */
     public boolean checkWin(int totalMineCount, Board backendBoard) {
         int unKnownCounter = 0;
         int flagCounter = 0;
-        int falseFlag =0;
+        int falseFlag = 0;
         boolean hasPlayerWon = false;
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 if (board[i][j].equals(UNKNOWN)) {
                     unKnownCounter++;
                 }
-                if (board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(BOMB)){
+                if (board[i][j].equals(FLAG) && backendBoard.board[i][j].equals(BOMB)) {
                     flagCounter++;
                 }
-                if (board[i][j].equals(FLAG) && !backendBoard.board[i][j].equals(BOMB)){
+                if (board[i][j].equals(FLAG) && !backendBoard.board[i][j].equals(BOMB)) {
                     falseFlag++;
                 }
             }
         }
-        if (((unKnownCounter+flagCounter) == totalMineCount || flagCounter == totalMineCount) && falseFlag==0) {
+        if (((unKnownCounter + flagCounter) == totalMineCount || flagCounter == totalMineCount) && falseFlag == 0) {
 
             hasPlayerWon = true;
-
         }
-
         return hasPlayerWon;
     }
 
@@ -229,39 +212,19 @@ public class Board {
         Player wants help to open a square, check if there is unknown left and if so, random coordinates and check if bomb and that it is unknown.
         if so call revealSquares.
      */
-
-   /* public void hint(Board PlayerBoard ){
-        boolean unknownLeft = areThereUnknownSquaresLeft();
-        //If we don't have any unknown squares leave method.
-        if (unknownLeft){
-            System.out.println("There are no unknown squares left but you have more flags than there is bombs. Unflag first and try again.");
-            return;
-        }
-        Random ran = new Random();
-        int row = ran.nextInt(boardSize);
-        int column = ran.nextInt(boardSize);
-        if (checkIfBomb(row, column)|| !PlayerBoard.checkSquare(row,column).equals(UNKNOWN))
-        {
-            hint(PlayerBoard);
-        } else {
-            revealSquares(row,column, PlayerBoard);
-        }
-    }
-*/
-    public boolean newHint(Board playerBoard) {
-
+    public boolean hint(Board playerBoard) {
         ArrayList<int[]> validSquares = new ArrayList<>();
         Random ran = new Random();
 
-        for(int row = 0;row < boardSize; row++){
-            for(int column = 0; column < boardSize; column++){
-                if(!checkIfBomb(row, column) &&
+        for (int row = 0; row < boardSize; row++) {
+            for (int column = 0; column < boardSize; column++) {
+                if (!checkIfBomb(row, column) &&
                         (playerBoard.board[row][column].equals(UNKNOWN))) {
                     validSquares.add(new int[]{row, column});
                 }
             }
         }
-        if(validSquares.size() > 0) {
+        if (validSquares.size() > 0) {
             int[] randomSquare = validSquares.get(ran.nextInt(validSquares.size()));
             revealSquares(randomSquare[0], randomSquare[1], playerBoard);
             return true;
@@ -269,7 +232,6 @@ public class Board {
             return false;
         }
     }
-
 
     /*
       Prints the board. A couple of loops
@@ -324,7 +286,6 @@ public class Board {
                 } else {
                     System.out.print(l + "|");
                 }
-
             }
             for (int m = 0; m < boardSize; m++) {
                 if (m == boardSize - 1) {
