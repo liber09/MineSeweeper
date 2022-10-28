@@ -230,7 +230,7 @@ public class Board {
         if so call revealSquares.
      */
 
-    public void hint(Board PlayerBoard ){
+   /* public void hint(Board PlayerBoard ){
         boolean unknownLeft = areThereUnknownSquaresLeft();
         //If we don't have any unknown squares leave method.
         if (unknownLeft){
@@ -247,7 +247,7 @@ public class Board {
             revealSquares(row,column, PlayerBoard);
         }
     }
-
+*/
     public boolean newHint(Board playerBoard) {
 
         ArrayList<int[]> validSquares = new ArrayList<>();
@@ -269,9 +269,6 @@ public class Board {
             return false;
         }
     }
-
-    // does not work properly when all mines are flagged but one is a false flag
-    //it casts an error
 
 
     /*
