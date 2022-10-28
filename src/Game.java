@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 public class Game {
     Board playerBoard; //The board that is visible to the player
     Board backendBoard; //The board in the background, handling mine positions etc
@@ -9,33 +10,32 @@ public class Game {
     public static final String TEXT_RESET = "\u001B[0m";
     public static final String TEXT_YELLOW = "\u001B[33m";
     public static final String TEXT_WHITE = "\u001B[37m";
-    public static final String TEXT_BOLD ="\033[0;1m";
+    public static final String TEXT_BOLD = "\033[0;1m";
 
     int counter;
     static int wins = 0;
     private int noOfHintsLeft;
 
-    public void startGame(){
+    public void startGame() {
         int boardSize;
         int difficulty;
         int round = 1;
 
-// Insane Bomb Panic 2!
-        System.out.println("              "+TEXT_RED+"                 *  S  *       ;  . \n"+ TEXT_RESET+
-                "Hello! \uD83D\uDCA3 Welcome to"+ TEXT_BOLD+ TEXT_RED+"   I     * N,  *  * A,  NE\n"+
-                "                       "+TEXT_RED+"  * '; "+TEXT_YELLOW+"*  *  '"+TEXT_RED+"' *  ;\n"+
-                "                        *;"+TEXT_YELLOW+" * BO *"+TEXT_RED+" ;MB *'\n"+
-                "                          *P *"+TEXT_YELLOW+"*;AN;"+TEXT_RED+";*,\n" +
-                "                         "+TEXT_WHITE+"/  "+TEXT_RED+"I* ; C* \n" +
-                "                   "+TEXT_WHITE+"    /   \n" +
-                "            "+TEXT_BLUE+"         _"+TEXT_WHITE+"s"+TEXT_BLUE+"_       \n"+
+        System.out.println("              " + TEXT_RED + "                 *  S  *       ;  . \n" + TEXT_RESET +
+                "Hello! \uD83D\uDCA3 Welcome to" + TEXT_BOLD + TEXT_RED + "   I     * N,  *  * A,  NE\n" +
+                "                       " + TEXT_RED + "  * '; " + TEXT_YELLOW + "*  *  '" + TEXT_RED + "' *  ;\n" +
+                "                        *;" + TEXT_YELLOW + " * BO *" + TEXT_RED + " ;MB *'\n" +
+                "                          *P *" + TEXT_YELLOW + "*;AN;" + TEXT_RED + ";*,\n" +
+                "                         " + TEXT_WHITE + "/  " + TEXT_RED + "I* ; C* \n" +
+                "                   " + TEXT_WHITE + "    /   \n" +
+                "            " + TEXT_BLUE + "         _" + TEXT_WHITE + "s" + TEXT_BLUE + "_       \n" +
                 "                    OOOO  \\\n" +
-                "               OOOOO OOOOOOO \\\n"+
-                "             OOOOT O"+TEXT_L_BLUE+" INSANE"+TEXT_BLUE+" OO \\\n" +
-                "            OOOL  OOO"+TEXT_L_BLUE+" BOMB"+TEXT_BLUE+" OOOO )\n" +
-                "            OOOL  OOO"+TEXT_L_BLUE+" PANIC "+TEXT_BLUE+"0OO )\n" +
-                "              OOOJ OOOO"+TEXT_L_BLUE+" 2 "+TEXT_BLUE+"OOOO )\n" +
-                "                OOOOOOOOOOO  )\n"+TEXT_RESET);
+                "               OOOOO OOOOOOO \\\n" +
+                "             OOOOT O" + TEXT_L_BLUE + " INSANE" + TEXT_BLUE + " OO \\\n" +
+                "            OOOL  OOO" + TEXT_L_BLUE + " BOMB" + TEXT_BLUE + " OOOO )\n" +
+                "            OOOL  OOO" + TEXT_L_BLUE + " PANIC " + TEXT_BLUE + "0OO )\n" +
+                "              OOOJ OOOO" + TEXT_L_BLUE + " 2 " + TEXT_BLUE + "OOOO )\n" +
+                "                OOOOOOOOOOO  )\n" + TEXT_RESET);
 
 
         do {
@@ -49,112 +49,14 @@ public class Game {
             noOfHintsLeft = 3;
 
             System.out.println("Get ready for round " + round + "!");
-            //gameLoop();
+
             newGameLoop();
 
             round++;
         }
         while (playAgain());
     }
-    private void gameLoop() {
-        Scanner input = new Scanner(System.in);
-        String[] currentInput;
-        int[] coordinates = new int[2];
-        Countdown Count = new Countdown();
-        Count.counter(counter);
-        String wannaPlaceFlag;
-        boolean gaveUp = false;
-        int hint = 3; //Player is given three hints each round
 
-        // Outer loop, runs for each move the player makes
-        while (true) {
-            printNumberOfBombsAndMarkedBombs();
-            // Inner loop, runs until the player enters correct input
-            //int timeLeft =Count.remainingTime();
-
-            while (true) {
-                if(Count.timesLeft()){
-                    System.out.println(Count.remainingTime()+" seconds left");} else {
-                    timeIsUp();
-                    return;
-
-                }
-                System.out.println(getInstructions(hint));
-
-                String rawInput = input.nextLine();
-                if (rawInput.equalsIgnoreCase("h") && hint > 0){
-                    backendBoard.hint(playerBoard);
-                    playerBoard.printBoard();
-                    hint--;
-                    if(playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
-                        System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
-                        wins++;
-                        System.out.println("Your total wins are: " + wins);
-                        return;
-                    }
-                    continue;
-                }
-               if(rawInput.equals("q")){
-                    System.out.println("Sad you gave up so easy!");
-                    gaveUp = true;
-                    break;       }
-
-
-
-                    currentInput = rawInput.split(" ");
-                // ok den sätter första på index 1 andra på index2 så har jag två strings
-                if(currentInput.length == 1){
-                    System.out.println("Input is needed, please try again");
-                    continue;
-                }
-                if (rawInput.charAt(0) == ' ') {
-                    System.out.println("Please put first tho coordinate for X then space then Y");
-                    continue;}
-                wannaPlaceFlag = currentInput[0].substring(0, 1);
-
-                if (wannaPlaceFlag.equalsIgnoreCase("F")) {
-                    try {
-                        placeFlags(currentInput);
-                    } catch (NumberFormatException n) {
-                        System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
-                    } catch (IndexOutOfBoundsException i) {
-                        System.out.println("Please enter TWO numbers; row and column.");
-                    }
-                } else {
-                    try {
-                        for (int i = 0; i < 2; i++) {
-                            coordinates[i] = Integer.parseInt(currentInput[i]);
-                        }
-                        backendBoard.revealSquares(coordinates[0], coordinates[1], playerBoard);
-                        playerBoard.printBoard();
-                        if (playerBoard.isSquareFlag(coordinates[0], coordinates[1])){
-                            System.out.println("There is a flag already on this position, please try another or remove flag first.");
-                            break;
-                        }else{
-                            if (backendBoard.checkIfBomb(coordinates[0], coordinates[1])) {
-                                gameOver(coordinates[0], coordinates[1]);
-                                return;
-                            }
-                        }
-                    } catch (NumberFormatException n) {
-                        System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
-                    } catch (IndexOutOfBoundsException i) {
-                        System.out.println("Please enter TWO numbers; row and column.");
-                    }
-                }
-                if(playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
-                    System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
-                    wins++;
-                    System.out.println("Your total wins are: " + wins);
-                    return;
-                }
-            }
-
-            if(gaveUp){
-                break;
-            }
-        }
-    }
 
     private void newGameLoop() {
 
@@ -169,7 +71,7 @@ public class Game {
             latestMove = userInput(count);
 
             // Here we check what kind of move the player made.
-            switch(latestMove) {
+            switch (latestMove) {
                 // if the player quit
                 case "q" -> {
                     backendBoard.printBoard();
@@ -179,9 +81,12 @@ public class Game {
                 // if the player used a hint
                 case "h" -> System.out.println("You used a hint to check a safe square.");
                 // if the player didn't touch a bomb
-                case "f", "all good", "no hints left" -> {}
+                case "f", "all good", "no hints left" -> {
+                }
                 // if the player ran out of time, we return
-                case "t" -> {return;}
+                case "t" -> {
+                    return;
+                }
                 // default is gameOver! (The player found a bomb.) The coordinates are returned and passed on to gameOver.
                 default -> {
                     String[] stringCoordinates;
@@ -196,8 +101,8 @@ public class Game {
             playerBoard.printBoard();
             printNumberOfBombsAndMarkedBombs();
             // ...and check if the player won
-            if(playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
-                System.out.println(TEXT_YELLOW +"Congratulations! You made it!"+TEXT_RESET);
+            if (playerBoard.checkWin(backendBoard.getTotalNumberOfBombs(), backendBoard)) {
+                System.out.println(TEXT_YELLOW + "Congratulations! You made it!" + TEXT_RESET);
                 wins++;
                 System.out.println("Your total wins are: " + wins);
                 return;
@@ -210,7 +115,7 @@ public class Game {
 
         String[] currentInput;
 
-        while(true) {
+        while (true) {
             if (count.timesLeft()) {
                 System.out.println(count.remainingTime() + " seconds left");
             } else {
@@ -224,15 +129,15 @@ public class Game {
 
             switch (rawInput) {
                 case "h" -> {
-                    if (noOfHintsLeft > 0 ) {
-                      if(backendBoard.newHint(playerBoard)) {
-                          noOfHintsLeft--;
-                          return "h";
-                      } else {
-                          System.out.println("One or more of the flags on the board are false. But which one/s?");
-                          return "all good";
-                      }
-                   } else {
+                    if (noOfHintsLeft > 0) {
+                        if (backendBoard.newHint(playerBoard)) {
+                            noOfHintsLeft--;
+                            return "h";
+                        } else {
+                            System.out.println("One or more of the flags on the board are false. But which one/s?");
+                            return "all good";
+                        }
+                    } else {
                         System.out.println("You have no hints left!");
                         return "no hints left";
                     }
@@ -247,13 +152,13 @@ public class Game {
                             playerBoard.placeFlag(Integer.parseInt(currentInput[0].substring(1)),
                                     Integer.parseInt(currentInput[1]));
                             return "f";
-                        } else if(playerBoard.isSquareFlag(Integer.parseInt(currentInput[0]), Integer.parseInt(currentInput[1]))) {
+                        } else if (playerBoard.isSquareFlag(Integer.parseInt(currentInput[0]), Integer.parseInt(currentInput[1]))) {
                             System.out.println("There is a flag already on this position, please try another or remove flag first.");
                             return "all good";
                         } else {
                             backendBoard.revealSquares(Integer.parseInt(currentInput[0]),
                                     Integer.parseInt(currentInput[1]), playerBoard);
-                            if(backendBoard.checkIfBomb(Integer.parseInt(currentInput[0]), Integer.parseInt(currentInput[1]))) {
+                            if (backendBoard.checkIfBomb(Integer.parseInt(currentInput[0]), Integer.parseInt(currentInput[1]))) {
                                 return currentInput[0] + " " + currentInput[1];
                             } else {
                                 return "all good";
@@ -268,38 +173,24 @@ public class Game {
             }
         }
     }
-    //Takes user input and converts it to int array then calls placeFlags on playerBoard.
-    private void placeFlags(String[] input){
-        int[] coordinates = new int[2];
-        try{
-            coordinates[0] = Integer.parseInt(input[0].substring(1));
-            coordinates[1] = Integer.parseInt(input[1]);
-            playerBoard.placeFlag(coordinates[0], coordinates[1]);
-            backendBoard.printBoard();
-            playerBoard.printBoard();
-        } catch (NumberFormatException n) {
-            System.out.println("Please enter co-ordinates (row and column) with just a space in between.");
 
-        } catch (IndexOutOfBoundsException i) {
-            System.out.println("Please enter TWO numbers; row and column.");
-        }
-    }
+
     //Returns user instructions depending on hints left, if zero we omit the row with number of hints left.
-    private String getInstructions(int hintsLeft){
+    private String getInstructions(int hintsLeft) {
         String instructions;
-        if (hintsLeft > 0){
+        if (hintsLeft > 0) {
             instructions = "Want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET +
                     "Enter coordinates  x and y, separate with space. \n" +
                     "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
-                    "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n\n" +
-                    "Hints left:"+hintsLeft+" Do you want a hint? press \"h\"\n" +
-                    "If you want to give up, please type \"q\""+TEXT_RESET;
-        }else{
+                    "Put an " + TEXT_RED + "\"F\"" + TEXT_RESET + " before your coordinates \n\n" +
+                    "Hints left:" + hintsLeft + " Do you want a hint? press \"h\"\n" +
+                    "If you want to give up, please type \"q\"" + TEXT_RESET;
+        } else {
             instructions = "Want to " + TEXT_YELLOW + "check a field: " + TEXT_RESET +
                     "Enter coordinates  x and y, separate with space. \n" +
                     "Want to" + TEXT_RED + " set/remove a flag: " + TEXT_RESET +
-                    "Put an " + TEXT_RED + "\"F\""+TEXT_RESET+" before your coordinates \n" +
-                    "Want to give up, please " + TEXT_RED + " type \"q\""+TEXT_RESET;
+                    "Put an " + TEXT_RED + "\"F\"" + TEXT_RESET + " before your coordinates \n" +
+                    "Want to give up, please " + TEXT_RED + " type \"q\"" + TEXT_RESET;
         }
         return instructions;
     }
@@ -308,8 +199,8 @@ public class Game {
     public int chooseLayout() {
         System.out.println(
                 "How large shall your board be?" +
-                        "Choose between a "+TEXT_YELLOW+"scale of 6x6 to 40x40!"+TEXT_RESET+"\n" +
-                        "Type "+TEXT_BOLD+TEXT_YELLOW+"\"6\" for 6x6, \"7\" for 7x7 "+ TEXT_RESET+"and so on.");
+                        "Choose between a " + TEXT_YELLOW + "scale of 6x6 to 40x40!" + TEXT_RESET + "\n" +
+                        "Type " + TEXT_BOLD + TEXT_YELLOW + "\"6\" for 6x6, \"7\" for 7x7 " + TEXT_RESET + "and so on.");
         boolean validAnswer = true;
 
         int scale = 0;
@@ -329,18 +220,14 @@ public class Game {
                 validAnswer = false;
             }
         } while (!validAnswer);
-
-
-            counter = scale * scale * 3;
-
-
+        counter = scale * scale * 3;
 
         return scale; // boardSize
     }
 
     //How hard should the game be. Easy=10% bombs, Medium=15% bombs, Hard=20% bombs
     protected int chooseDifficulty() {
-        System.out.println("GREAT CHOICE! Choose your level of difficulty:" + TEXT_YELLOW +"\"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
+        System.out.println("GREAT CHOICE! Choose your level of difficulty:" + TEXT_YELLOW + "\"e\" for easy, \"m\" for medium and \"h\" for hard!" + TEXT_RESET);
 
         boolean validChoiceDifficulty;
         int difficulty = 0;
@@ -362,13 +249,18 @@ public class Game {
                 }
                 default -> {
                     System.out.println("That's not a valid answer, " +
-                            "please choose between"+TEXT_YELLOW+" \"e\" for easy, \"m\" for medium and \"h\" for hard!"+TEXT_RESET);
+                            "please choose between" + TEXT_YELLOW + " \"e\" for easy, \"m\" for medium and \"h\" for hard!" + TEXT_RESET);
                     validChoiceDifficulty = false;
                 }
             }
         } while (!validChoiceDifficulty);
 
         return difficulty;
+    }
+    //The game is over, player hit a bomb and loose, inform player.
+    public void gameOver(int x, int y) {
+        System.out.println(TEXT_RED + "BOOM!! \uD83D\uDCA3" + TEXT_RESET + " X= " + x + " and Y= " + y + " was a bomb\n GAME OVER!");
+        backendBoard.printBoard();
     }
 
     //Checks if the player wants to play the game again
@@ -392,19 +284,14 @@ public class Game {
         }
     }
 
-    //The game is over, player hit a bomb and loose, inform player.
-    public void gameOver(int x, int y){
-        System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" X= "+x+" and Y= "+y+" was a bomb\n GAME OVER!");
+    public void timeIsUp() {
+        System.out.println(TEXT_RED + "BOOM!! \uD83D\uDCA3" + TEXT_RESET + " your time was up - GAME OVER");
         backendBoard.printBoard();
-    }
-    public void timeIsUp(){
-        System.out.println(TEXT_RED+"BOOM!! \uD83D\uDCA3" +TEXT_RESET+" your time was up - GAME OVER");
-        backendBoard.printBoard();
-    }
-    //Prints number of mines and number of marked mines to the user
-    public void printNumberOfBombsAndMarkedBombs(){
-        System.out.println("Number of bombs to find "+ backendBoard.getTotalNumberOfBombs() + ". You have now marked "+playerBoard.countFlags()+ " suspected bombs.");
     }
 
+    //Prints number of mines and number of marked mines to the user
+    public void printNumberOfBombsAndMarkedBombs() {
+        System.out.println("Number of bombs to find " + backendBoard.getTotalNumberOfBombs() + ". You have now marked " + playerBoard.countFlags() + " suspected bombs.");
+    }
 
 }
