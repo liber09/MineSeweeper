@@ -130,7 +130,7 @@ public class Game {
             switch (rawInput) {
                 case "h" -> {
                     if (noOfHintsLeft > 0) {
-                        if (backendBoard.newHint(playerBoard)) {
+                        if (backendBoard.hint(playerBoard)) {
                             noOfHintsLeft--;
                             return "h";
                         } else {
